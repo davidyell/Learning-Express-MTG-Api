@@ -1,0 +1,14 @@
+version: '3.9'
+services:
+  express:
+    build:
+     context: ./
+     dockerfile: ./infrastructure/node/Dockerfile
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./:/app:cached
+  mongo:
+    build:
+      context: ./
+      dockerfile: ./infrastructure/mongodb/Dockerfile
