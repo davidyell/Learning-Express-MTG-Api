@@ -34,16 +34,17 @@ const deck = {
     ]
 };
 
-router.get('/api/decks', function(req, res, next) {
-  res.json({
+router.get('/api/decks', function(request, response, next) {
+    response.json({
       decks: [
           deck
       ]
   })
 });
 
-router.get('/api/decks/1', function(req, res, next) {
-    res.json(deck)
-  });
+router.get('/api/decks/:id', function(request, response, next) {
+    const id = request.params.id
+    response.json(deck)
+});
 
 module.exports = router;
