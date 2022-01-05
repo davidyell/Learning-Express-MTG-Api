@@ -8,7 +8,23 @@ services:
       - '3000:3000'
     volumes:
       - ./:/app:cached
+    networks:
+      - learning-mtg-api
   mongo:
+    restart: always
     build:
       context: ./
       dockerfile: ./infrastructure/mongodb/Dockerfile
+    ports:
+     - '27017:27017'
+    volumes:
+      - mtg-builder-mongo:/data/db:delegated
+    networks:
+      - learning-mtg-api
+
+networks:
+  learning-mtg-api:
+    name: learning-mtg-api
+
+volumes:
+  mtg-builder-mongo:
