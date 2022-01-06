@@ -1,12 +1,12 @@
 function listToArray(cards) {
-    return cards.split(', ')
+  return cards.split(', ');
 }
 
 function arrayToList(cards) {
-    return cards.join(', ')
+  return cards.join(', ');
 }
 
 module.exports = {
-    listToArray,
-    arrayToList
-}
+  listToArray,
+  arrayToList,
+};
