@@ -19,7 +19,14 @@ router.get('/api/decks', function(request, response, next) {
 router.get('/api/decks/:id', function(request, response, next) {
     const result = deckFinders.fetchOne(request.params.id)
 
-    response.json(result);
+    if (typeof result !== 'undefined') {
+        response.json(result)
+    } else {
+        response.status(404).json({
+            'error': 'Deck not found'
+        })
+    }
+    
 });
 
 module.exports = router;
