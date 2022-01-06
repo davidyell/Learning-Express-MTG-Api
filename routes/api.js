@@ -12,7 +12,7 @@ router.get('/api/decks', function(request, response, next) {
     const results = deckFinders.fetchAll()
 
     response.json({
-      decks: [results]
+      decks: results
     });
 })
 
