@@ -1,6 +1,6 @@
 const Database = require('better-sqlite3');
 const path = require('path');
-const convert = require('./cardListConversion');
+const convert = require('./cardListConversion.ts');
 
 const dbFilename = path.join(__dirname, '..', '..', 'infrastructure', 'sqlite', 'deck-builder.sqlite3');
 
@@ -10,7 +10,7 @@ function fetchAll() {
   const results = statement.all();
 
   if (results.length >= 1) {
-    results.forEach((value, index) => {
+    results.forEach((value: any, index: string | number) => {
       results[index].cards = convert.listToArray(results[index].cards);
     });
   }
@@ -18,7 +18,7 @@ function fetchAll() {
   return results;
 }
 
-function fetchOne(id) {
+function fetchOne(id: number) {
   const db = new Database(dbFilename, { fileMustExist: true });
   const statement = db.prepare('SELECT id, name, cards FROM decks WHERE id = ?');
   const result = statement.get(id);

@@ -1,8 +1,8 @@
-function listToArray(cards) {
+function listToArray(cards: string): string[] {
   return cards.split(', ');
 }
 
-function arrayToList(cards) {
+function arrayToList(cards: string[]): string {
   return cards.join(', ');
 }
 

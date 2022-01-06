@@ -1,5 +1,5 @@
 const express = require('express');
-const deckFinders = require('../src/decks/deckFinders');
+const deckFinders = require('../src/decks/deckFinders.ts');
 
 const router = express.Router();
 
