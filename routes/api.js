@@ -1,7 +1,5 @@
 const express = require('express');
-const path = require('path');
-
-const Database = require('better-sqlite3');
+const deckFinders = require('../src/decks/deckFinders');
 
 var router = express.Router();
 
@@ -11,11 +9,7 @@ router.get('/', function (request, response, next) {
 });
 
 router.get('/api/decks', function(request, response, next) {
-    const dbFilename = path.join(__dirname, '..', 'infrastructure', 'sqlite', 'deck-builder.sqlite3');
-
-    const db = new Database(dbFilename, { fileMustExist: true });
-    const statement = db.prepare('SELECT id, name, cards FROM decks');
-    const results = statement.all();
+    const results = deckFinders.fetchAll()
 
     response.json({
       decks: [results]
@@ -23,8 +17,9 @@ router.get('/api/decks', function(request, response, next) {
 })
 
 router.get('/api/decks/:id', function(request, response, next) {
-    const id = request.params.id;
-    response.json(deck);
+    const result = deckFinders.fetchOne(request.params.id)
+
+    response.json(result);
 });
 
 module.exports = router;
