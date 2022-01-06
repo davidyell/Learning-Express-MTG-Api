@@ -1,8 +1,8 @@
-const express = require('express');
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
+import express from 'express';
+import cookieParser from 'cookie-parser';
+import logger from 'morgan';
 
-const apiRouter = require('../routes/api.ts');
+import apiRoutes from '../routes/api';
 
 const app = express();
 
@@ -11,6 +11,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use('/', apiRouter);
+app.use('/', apiRoutes);
 
-module.exports = app;
+export default app;

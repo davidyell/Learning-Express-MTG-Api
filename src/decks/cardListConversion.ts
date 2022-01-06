@@ -1,12 +1,8 @@
-function listToArray(cards: string): string[] {
-  return cards.split(', ');
-}
+const listToArray = (cards: string): string[] => cards.split(', ');
 
-function arrayToList(cards: string[]): string {
-  return cards.join(', ');
-}
+const arrayToList = (cards: string[]): string => cards.join(', ');
 
-module.exports = {
+export {
   listToArray,
   arrayToList,
 };

@@ -1,36 +1,40 @@
-const Database = require('better-sqlite3');
-const path = require('path');
-const convert = require('./cardListConversion.ts');
+import Database from 'better-sqlite3';
+import path from 'path';
+import { listToArray } from './cardListConversion';
+import Deck from './DeckInterface';
 
-const dbFilename = path.join(__dirname, '..', '..', 'infrastructure', 'sqlite', 'deck-builder.sqlite3');
+let dbFilename = process.env.DB;
+if (dbFilename === null) {
+  dbFilename = path.join(__dirname, '..', '..', 'infrastructure', 'sqlite', 'deck-builder.sqlite3');
+}
 
-function fetchAll() {
+const fetchAll = () => {
   const db = new Database(dbFilename, { fileMustExist: true });
   const statement = db.prepare('SELECT id, name, cards FROM decks');
-  const results = statement.all();
+  const results: Deck[] = statement.all();
 
   if (results.length >= 1) {
-    results.forEach((value: any, index: string | number) => {
-      results[index].cards = convert.listToArray(results[index].cards);
+    results.forEach((value: Deck, index: number) => {
+      results[index].cards = listToArray(<string>results[index].cards);
     });
   }
 
   return results;
-}
+};
 
-function fetchOne(id: number) {
+const fetchOne = (id: string | number) => {
   const db = new Database(dbFilename, { fileMustExist: true });
   const statement = db.prepare('SELECT id, name, cards FROM decks WHERE id = ?');
-  const result = statement.get(id);
+  const result: Deck = statement.get(id);
 
   if (typeof result !== 'undefined') {
-    result.cards = convert.listToArray(result.cards);
+    result.cards = listToArray(<string>result.cards);
   }
 
   return result;
-}
+};
 
-module.exports = {
+export {
   fetchAll,
   fetchOne,
 };

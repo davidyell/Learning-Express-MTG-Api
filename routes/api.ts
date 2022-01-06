@@ -1,23 +1,23 @@
-const express = require('express');
-const deckFinders = require('../src/decks/deckFinders.ts');
+import { Router, Request, Response } from 'express';
+import { fetchAll, fetchOne } from '../src/decks/deckFinders';
 
-const router = express.Router();
+const router = Router();
 
-router.get('/', (request, response) => {
+router.get('/', (request: Request, response: Response) => {
   response.send('<h1>This is api only</h1>');
   response.end();
 });
 
-router.get('/api/decks', (request, response) => {
-  const results = deckFinders.fetchAll();
+router.get('/api/decks', (request: Request, response: Response) => {
+  const results = fetchAll();
 
   response.json({
     decks: results,
   });
 });
 
-router.get('/api/decks/:id', (request, response) => {
-  const result = deckFinders.fetchOne(request.params.id);
+router.get('/api/decks/:id', (request: Request, response: Response) => {
+  const result = fetchOne(request.params.id);
 
   if (typeof result !== 'undefined') {
     response.json(result);
@@ -28,4 +28,4 @@ router.get('/api/decks/:id', (request, response) => {
   }
 });
 
-module.exports = router;
+export default router;
