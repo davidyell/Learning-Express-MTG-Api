@@ -7,7 +7,8 @@
     "start": "node ./bin/www",
     "dev": "nodemon ./bin/www",
     "lint": "eslint -c .eslintrc.json --fix routes/* src/**/*",
-    "build": "tsc"
+    "build": "tsc",
+    "dev:server": "nodemon --watch './**/*.ts' --exec 'ts-node' bin/server.ts"
   },
   "dependencies": {
     "better-sqlite3": "^7.4.6",
