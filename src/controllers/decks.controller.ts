@@ -7,6 +7,11 @@ const index = async (request: Request, response: Response) => {
   const results = await prisma.decks.findMany({
     include: {
       player: true,
+      _count: {
+        select: {
+          cards_in_decks: true,
+        },
+      },
     },
   });
 

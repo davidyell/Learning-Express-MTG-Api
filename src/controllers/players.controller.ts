@@ -4,7 +4,15 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 const index = async (request: Request, response: Response) => {
-  const results = await prisma.players.findMany();
+  const results = await prisma.players.findMany({
+    include: {
+      _count: {
+        select: {
+          decks: true,
+        },
+      },
+    },
+  });
 
   return response.json(results);
 };
