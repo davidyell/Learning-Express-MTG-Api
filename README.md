@@ -30,7 +30,7 @@ The project uses Yarn 2, so all the dependencies are cloned with the project. [W
  - [x] Normalise the database to separate cards and counts
  - [ ] Implement cross-env
  - [ ] Implement a basic Docker container
- - [ ] Automated card data download and install into database
+ - [ ] Automated card data download and install into database & remove the cards db from git repo
  - [ ] Code for formatting api response shapes
  - [ ] Aggregate count of players decks, and decks cards
  - [ ] Create a deck and edit a deck

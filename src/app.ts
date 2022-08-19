@@ -2,7 +2,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 
-import apiRoutes from '../routes/api';
+import apiRoutes from './routes/api';
 
 const app = express();
 

@@ -1,33 +1,19 @@
 import { Router, Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
+import { index as DeckIndex, view as DeckView } from '../controllers/decks.controller';
+import { view as CardView } from '../controllers/cards.controller';
 
 const router = Router();
-const prisma = new PrismaClient();
 
-router.get('/api/decks', async (request: Request, response: Response) => {
-  const results = await prisma.decks.findMany({
-    include: {
-      player: true,
-    },
-  });
-
-  response.json(results);
+router.get('/api/decks', (request: Request, response: Response) => {
+  DeckIndex(request, response);
 });
 
-router.get('/api/decks/:id', async (request: Request, response: Response) => {
-  const result = await prisma.decks.findUniqueOrThrow({
-    where: { id: parseInt(request.params.id, 10) },
-    include: {
-      player: true,
-      cards_in_decks: {
-        include: {
-          cards: true,
-        },
-      },
-    },
-  });
+router.get('/api/decks/:id', (request: Request, response: Response) => {
+  DeckView(request, response);
+});
 
-  response.json(result);
+router.get('/api/cards/:id', (request: Request, response: Response) => {
+  CardView(request, response);
 });
 
 export default router;
