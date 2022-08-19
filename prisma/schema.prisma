@@ -105,13 +105,13 @@ model Cards {
 }
 
 model CardsInDecks {
-  id           Int   @id @default(autoincrement())
+  id           Int     @id @default(autoincrement())
   deck_id      Int
   card_id      Int
-  quantity     Int   @default(1)
-  is_sideboard Int   @default(0)
-  decks        Decks @relation(fields: [deck_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  cards        Cards @relation(fields: [card_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  quantity     Int     @default(1)
+  is_sideboard Boolean @default(false)
+  decks        Decks   @relation(fields: [deck_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  cards        Cards   @relation(fields: [card_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([deck_id, card_id], map: "cards_in_decks_deck_id_IDX")
   @@map("cards_in_decks")
@@ -168,6 +168,7 @@ model Players {
   last_name  String
   email      String
   created    DateTime? @default(now())
+  avatar     String?
   decks      Decks[]
 
   @@map("players")

@@ -52,8 +52,10 @@ paths:
           in: path
           required: true
           schema:
-            type: number
+            type: string
           description: The numerical id of the card to retrieve
+          minLength: '1'
+      operationId: ''
       responses:
         '200':
           description: OK
@@ -62,6 +64,41 @@ paths:
               schema: {}
         '404':
           description: Card not found
+          content:
+            application/json:
+              schema: {}
+  /api/players:
+    get:
+      summary: Get a list of all players
+      description: ''
+      parameters: []
+      operationId: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {}
+  '/api/players/{playerId}':
+    get:
+      summary: View a single player
+      description: ''
+      parameters:
+        - name: playerId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Numerical id of the player
+      operationId: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {}
+        '404':
+          description: Player not found
           content:
             application/json:
               schema: {}
