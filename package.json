@@ -4,7 +4,7 @@
   "private": true,
   "main": "dist/src/app.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only --watch src ./src/index.ts",
+    "dev": "ts-node-dev --respawn --exit-child --watch src ./src/index.ts",
     "lint": "eslint -c .eslintrc.json --fix routes/* src/**/*",
     "build": "tsc",
     "validate": "tsc --noEmit",
