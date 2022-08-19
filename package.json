@@ -5,19 +5,22 @@
   "main": "dist/src/app.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --exit-child --watch src ./src/index.ts",
-    "lint": "eslint -c .eslintrc.json --fix routes/* src/**/*",
+    "lint": "eslint -c .eslintrc.json --fix \"./src/**\"",
     "build": "tsc",
     "validate": "tsc --noEmit",
-    "database:schema:pull": "prisma db pull",
-    "database:generate:client": "prisma generate",
+    "prisma:pull": "prisma db pull",
+    "prisma:generate": "prisma generate",
+    "prisma:seed": "prisma db seed",
     "test": "jest"
   },
   "dependencies": {
+    "@faker-js/faker": "^7.4.0",
     "@prisma/client": "^4.2.1",
     "better-sqlite3": "^7.4.6",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "~4.16.1",
+    "lodash": "^4.17.21",
     "morgan": "~1.9.1"
   },
   "devDependencies": {
@@ -25,8 +28,9 @@
     "@types/cookie-parser": "^1.4.2",
     "@types/express": "^4.17.13",
     "@types/jest": "^28.1.7",
+    "@types/lodash": "^4.14.184",
     "@types/morgan": "^1.9.3",
-    "@types/node": "^17.0.8",
+    "@types/node": "^18.7.7",
     "@typescript-eslint/eslint-plugin": "^5.9.0",
     "@typescript-eslint/parser": "^5.9.0",
     "eslint": "^8.6.0",
@@ -35,9 +39,12 @@
     "jest": "^28.1.3",
     "prisma": "^4.2.1",
     "ts-jest": "^28.0.8",
-    "ts-node": "^10.4.0",
+    "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",
     "typescript": "^4.7.4"
   },
-  "packageManager": "yarn@3.2.2"
+  "packageManager": "yarn@3.2.2",
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  }
 }

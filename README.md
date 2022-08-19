@@ -10,12 +10,20 @@ It just provides a json web service with two endpoints
 Endpoints are documented in the [OpenApi file](openapi.yml)
 
 ## How?
-The app needs to be built from Typescript to run the Node server currently.
+The app only provides a dev setup currently. The following will setup the dependancies, generate the Prisma ORM client, 
+and then seed some players and decks.
 
-The project uses Yarn 2, so all the dependencies are cloned with the project. [What is Zero-Install?](https://yarnpkg.com/features/zero-installs)
+```bash
+yarn install
+yarn run prisma:generate
+yarn run prisma:seed
+yarn run dev
 
-`yarn run build` to build the typescript  
-`yarn run start` to start the server on http://localhost:3001/api/decks
+```
+
+Server runs at http://localhost:3001/api/decks by default.
+
+Options available in the `.env.example` file.
 
 ----
 ## References
@@ -36,3 +44,5 @@ The project uses Yarn 2, so all the dependencies are cloned with the project. [W
  - [ ] Create a deck and edit a deck
  - [ ] Validation when creating decks - 4 card max, cast colours with no matching lands, 15 card sideboard, etc
  - [x] Specific card endpoint, for FE to see a certain card?
+ - [ ] Players endpoint
+ - [ ] Get database under 100mb by removing extra card tables and columns
