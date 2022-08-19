@@ -97,7 +97,6 @@ model Cards {
   variations               String?
   watermark                String?
   cards_in_decks           CardsInDecks[]
-  foreign_data             ForeignData[]
   legalities               Legalities[]
   rulings                  Rulings[]
 
@@ -128,20 +127,6 @@ model Decks {
 
   @@index([player_id], map: "decks_player_id_IDX")
   @@map("decks")
-}
-
-model ForeignData {
-  id           Int     @id @default(autoincrement())
-  flavorText   String?
-  language     String?
-  multiverseid Int?
-  name         String?
-  text         String?
-  type         String?
-  uuid         String?
-  cards        Cards?  @relation(fields: [uuid], references: [uuid], onDelete: Cascade)
-
-  @@map("foreign_data")
 }
 
 model Legalities {

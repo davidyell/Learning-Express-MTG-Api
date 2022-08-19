@@ -9,19 +9,17 @@ It just provides a json web service with two endpoints
 
 Endpoints are documented in the [OpenApi file](openapi.yml)
 
-## How?
-The app only provides a dev setup currently. The following will setup the dependancies, generate the Prisma ORM client, 
-and then seed some players and decks.
+## Installation
+For *first time* install, after the dependancies, you'll need to populate the database with some data.
 
-```bash
-yarn install
-yarn run prisma:generate
-yarn run prisma:seed
-yarn run dev
-
-```
-
-Server runs at http://localhost:3001/api/decks by default.
+* Install the dependancies with `yarn install`
+* Generate the Prisma orm client `yarn prisma generate`
+* Create the database schema `yarn prisma db push`
+* Insert the card data from `infrastructure/sql` one file per table.
+  * :warning: These are stored as sql to keep file size down
+* Seed some players and decks `yarn prisma db seed`
+* Run the dev server `yarn run dev`
+* Visit http://localhost:3001/api/decks to see some MtG decks
 
 Options available in the `.env.example` file.
 
@@ -40,9 +38,9 @@ Options available in the `.env.example` file.
  - [ ] Implement a basic Docker container
  - [ ] Automated card data download and install into database & remove the cards db from git repo
  - [ ] Code for formatting api response shapes
- - [ ] Aggregate count of players decks, and decks cards
+ - [x] Aggregate count of players decks, and decks cards
  - [ ] Create a deck and edit a deck
  - [ ] Validation when creating decks - 4 card max, cast colours with no matching lands, 15 card sideboard, etc
  - [x] Specific card endpoint, for FE to see a certain card?
- - [ ] Players endpoint
- - [ ] Get database under 100mb by removing extra card tables and columns
+ - [x] Players endpoint
+ - [x] Get database under 100mb by removing extra card tables and columns
