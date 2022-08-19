@@ -1,6 +1,6 @@
-import { countDeckSize } from './deckSize.util'
+import { countDeckSize } from './decks.util'
 
-describe('Deck size counting utility', () => {
+describe('Deck counting utility', () => {
   it('should count cards', () => {
     const cardsInDeck = [
       {
