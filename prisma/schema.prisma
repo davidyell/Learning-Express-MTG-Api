@@ -7,8 +7,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model cards {
-  id                       Int                     @id @default(autoincrement())
+model Cards {
+  id                       Int            @id @default(autoincrement())
   artist                   String?
   asciiName                String?
   availability             String?
@@ -35,23 +35,23 @@ model cards {
   frameEffects             String?
   frameVersion             String?
   hand                     String?
-  hasAlternativeDeckLimit  Int                     @default(0)
-  hasContentWarning        Int                     @default(0)
-  hasFoil                  Int                     @default(0)
-  hasNonFoil               Int                     @default(0)
-  isAlternative            Int                     @default(0)
-  isFullArt                Int                     @default(0)
-  isFunny                  Int                     @default(0)
-  isOnlineOnly             Int                     @default(0)
-  isOversized              Int                     @default(0)
-  isPromo                  Int                     @default(0)
-  isRebalanced             Int                     @default(0)
-  isReprint                Int                     @default(0)
-  isReserved               Int                     @default(0)
-  isStarter                Int                     @default(0)
-  isStorySpotlight         Int                     @default(0)
-  isTextless               Int                     @default(0)
-  isTimeshifted            Int                     @default(0)
+  hasAlternativeDeckLimit  Int            @default(0)
+  hasContentWarning        Int            @default(0)
+  hasFoil                  Int            @default(0)
+  hasNonFoil               Int            @default(0)
+  isAlternative            Int            @default(0)
+  isFullArt                Int            @default(0)
+  isFunny                  Int            @default(0)
+  isOnlineOnly             Int            @default(0)
+  isOversized              Int            @default(0)
+  isPromo                  Int            @default(0)
+  isRebalanced             Int            @default(0)
+  isReprint                Int            @default(0)
+  isReserved               Int            @default(0)
+  isStarter                Int            @default(0)
+  isStorySpotlight         Int            @default(0)
+  isTextless               Int            @default(0)
+  isTimeshifted            Int            @default(0)
   keywords                 String?
   language                 String?
   layout                   String?
@@ -93,102 +93,118 @@ model cards {
   toughness                String?
   type                     String?
   types                    String?
-  uuid                     Unsupported("text(36)") @unique(map: "sqlite_autoindex_cards_1")
+  uuid                     String         @unique(map: "sqlite_autoindex_cards_1")
   variations               String?
   watermark                String?
-  cards_in_decks           cards_in_decks[]
-  foreign_data             foreign_data[]
-  legalities               legalities[]
-  rulings                  rulings[]
+  cards_in_decks           CardsInDecks[]
+  foreign_data             ForeignData[]
+  legalities               Legalities[]
+  rulings                  Rulings[]
+
+  @@map("cards")
 }
 
-model cards_in_decks {
+model CardsInDecks {
   id           Int   @id @default(autoincrement())
   deck_id      Int
   card_id      Int
   quantity     Int   @default(1)
   is_sideboard Int   @default(0)
-  decks        decks @relation(fields: [deck_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  cards        cards @relation(fields: [card_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  decks        Decks @relation(fields: [deck_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  cards        Cards @relation(fields: [card_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([deck_id, card_id], map: "cards_in_decks_deck_id_IDX")
+  @@map("cards_in_decks")
 }
 
-model decks {
-  id             Int              @id @default(autoincrement())
+model Decks {
+  id             Int            @id @default(autoincrement())
   name           String
   player_id      Int
-  created        String           @default("CURRENT_TIMESTAMP")
-  updated        String?
-  player         players          @relation(fields: [player_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  cards_in_decks cards_in_decks[]
+  created        DateTime       @default(now())
+  updated        DateTime?      @updatedAt
+  player         Players        @relation(fields: [player_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  cards_in_decks CardsInDecks[]
 
   @@index([player_id], map: "decks_player_id_IDX")
+  @@map("decks")
 }
 
-model foreign_data {
-  id           Int                      @id @default(autoincrement())
+model ForeignData {
+  id           Int     @id @default(autoincrement())
   flavorText   String?
   language     String?
   multiverseid Int?
   name         String?
   text         String?
   type         String?
-  uuid         Unsupported("text(36)")?
-  cards        cards?                   @relation(fields: [uuid], references: [uuid], onDelete: Cascade)
+  uuid         String?
+  cards        Cards?  @relation(fields: [uuid], references: [uuid], onDelete: Cascade)
+
+  @@map("foreign_data")
 }
 
-model legalities {
-  id     Int                      @id @default(autoincrement())
+model Legalities {
+  id     Int     @id @default(autoincrement())
   format String?
   status String?
-  uuid   Unsupported("text(36)")?
-  cards  cards?                   @relation(fields: [uuid], references: [uuid], onDelete: Cascade)
+  uuid   String?
+  cards  Cards?  @relation(fields: [uuid], references: [uuid], onDelete: Cascade)
+
+  @@map("legalities")
 }
 
-model meta {
+model Meta {
   id      Int       @id @default(autoincrement())
   date    DateTime?
   version String?
+
+  @@map("meta")
 }
 
-model players {
-  id         Int     @id @default(autoincrement())
+model Players {
+  id         Int       @id @default(autoincrement())
   first_name String
   last_name  String
   email      String
-  created    String? @default("CURRENT_TIMESTAMP")
-  decks      decks[]
+  created    DateTime? @default(now())
+  decks      Decks[]
+
+  @@map("players")
 }
 
-model rulings {
-  id    Int                      @id @default(autoincrement())
+model Rulings {
+  id    Int       @id @default(autoincrement())
   date  DateTime?
   text  String?
-  uuid  Unsupported("text(36)")?
-  cards cards?                   @relation(fields: [uuid], references: [uuid], onDelete: Cascade)
+  uuid  String?
+  cards Cards?    @relation(fields: [uuid], references: [uuid], onDelete: Cascade)
+
+  @@map("rulings")
 }
 
-model set_translations {
-  id          Int                     @id @default(autoincrement())
+model SetTranslations {
+  id          Int     @id @default(autoincrement())
   language    String?
-  setCode     Unsupported("text(8)")?
+  setCode     String?
   translation String?
-  sets        sets?                   @relation(fields: [setCode], references: [code], onDelete: Cascade)
+  sets        Sets?   @relation(fields: [setCode], references: [code], onDelete: Cascade)
+
+  @@map("set_translations")
 }
 
-model sets {
-  id               Int                    @id @default(autoincrement())
+model Sets {
+  id               Int               @id @default(autoincrement())
   baseSetSize      Int?
   block            String?
   booster          String?
   cardsphereSetId  Int?
-  code             Unsupported("text(8)") @unique(map: "sqlite_autoindex_sets_1")
-  isFoilOnly       Int                    @default(0)
-  isForeignOnly    Int                    @default(0)
-  isNonFoilOnly    Int                    @default(0)
-  isOnlineOnly     Int                    @default(0)
-  isPartialPreview Int                    @default(0)
+  code             String            @unique(map: "sqlite_autoindex_sets_1")
+  isFoilOnly       Int               @default(0)
+  isForeignOnly    Int               @default(0)
+  isNonFoilOnly    Int               @default(0)
+  isOnlineOnly     Int               @default(0)
+  isPartialPreview Int               @default(0)
   keyruneCode      String?
   mcmId            Int?
   mcmIdExtras      Int?
@@ -201,11 +217,13 @@ model sets {
   tcgplayerGroupId Int?
   totalSetSize     Int?
   type             String?
-  set_translations set_translations[]
+  set_translations SetTranslations[]
+
+  @@map("sets")
 }
 
-model tokens {
-  id                     Int                     @id @default(autoincrement())
+model Tokens {
+  id                     Int     @id @default(autoincrement())
   artist                 String?
   asciiName              String?
   availability           String?
@@ -218,13 +236,13 @@ model tokens {
   flavorText             String?
   frameEffects           String?
   frameVersion           String?
-  hasFoil                Int                     @default(0)
-  hasNonFoil             Int                     @default(0)
-  isFullArt              Int                     @default(0)
-  isFunny                Int                     @default(0)
-  isPromo                Int                     @default(0)
-  isReprint              Int                     @default(0)
-  isTextless             Int                     @default(0)
+  hasFoil                Int     @default(0)
+  hasNonFoil             Int     @default(0)
+  isFullArt              Int     @default(0)
+  isFunny                Int     @default(0)
+  isPromo                Int     @default(0)
+  isReprint              Int     @default(0)
+  isTextless             Int     @default(0)
   keywords               String?
   language               String?
   layout                 String?
@@ -252,6 +270,8 @@ model tokens {
   toughness              String?
   type                   String?
   types                  String?
-  uuid                   Unsupported("text(36)")
+  uuid                   String
   watermark              String?
+
+  @@map("tokens")
 }

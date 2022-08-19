@@ -12,5 +12,6 @@ const view = async (request: Request, response: Response) => {
 };
 
 export {
+  // eslint-disable-next-line import/prefer-default-export
   view,
 };

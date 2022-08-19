@@ -1,6 +1,6 @@
-import { cards_in_decks } from "@prisma/client";
+import { CardsInDecks } from '@prisma/client';
 
-const countDeckSize = (cards: cards_in_decks[]): number => {
+const countDeckSize = (cards: CardsInDecks[]): number => {
   const size = 0;
   const deckSize = cards.reduce(
     (previousValue, currentValue) => previousValue + currentValue.quantity,
