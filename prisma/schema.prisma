@@ -169,16 +169,6 @@ model Rulings {
   @@map("rulings")
 }
 
-model SetTranslations {
-  id          Int     @id @default(autoincrement())
-  language    String?
-  setCode     String?
-  translation String?
-  sets        Sets?   @relation(fields: [setCode], references: [code], onDelete: Cascade)
-
-  @@map("set_translations")
-}
-
 model Sets {
   id               Int               @id @default(autoincrement())
   baseSetSize      Int?
@@ -203,7 +193,6 @@ model Sets {
   tcgplayerGroupId Int?
   totalSetSize     Int?
   type             String?
-  set_translations SetTranslations[]
 
   @@map("sets")
 }
