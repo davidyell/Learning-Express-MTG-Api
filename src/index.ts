@@ -1,20 +1,16 @@
 #!/usr/bin/env node
 
-const path = require('path');
-
-process.env.DB = path.join(__dirname, '..', 'infrastructure', 'sqlite', 'deck-builder.sqlite3');
-
 /**
  * Module dependencies.
  */
 const http = require('http');
 const debug = require('debug');
-const app = require('../dist/src/app').default;
+const app = require('../src/app').default;
 
 /**
  * Normalize a port into a number, string, or false.
  */
-function normalizePort(val) {
+function normalizePort(val: any) {
   const port = parseInt(val, 10);
 
   if (Number.isNaN(port)) {
@@ -33,13 +29,13 @@ function normalizePort(val) {
 /**
  * Get port from environment and store in Express.
  */
-const port = normalizePort(process.env.PORT || '3000');
+const port = normalizePort(process.env.PORT || '3001');
 app.set('port', port);
 
 /**
  * Event listener for HTTP server "error" event.
  */
-function onError(error) {
+function onError(error: any) {
   if (error.syscall !== 'listen') {
     throw error;
   }
