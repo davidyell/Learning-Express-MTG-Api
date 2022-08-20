@@ -54,7 +54,6 @@ paths:
           schema:
             type: string
           description: The numerical id of the card to retrieve
-          minLength: '1'
       operationId: ''
       responses:
         '200':
