@@ -45,7 +45,8 @@ sqlite> .read ./infrastructure/sql/meta.sql
  - [x] Normalise the database to separate cards and counts
  - [ ] Implement cross-env
  - [ ] Implement a basic Docker container
- - [ ] Automated card data download and install into database & remove the cards db from git repo
+ - [ ] Automated card data download and install into database
+ - [x] Allow the database to be built, rather than downloaded from the repo
  - [ ] Code for formatting api response shapes
  - [x] Aggregate count of players decks, and decks cards
  - [ ] Create a deck and edit a deck
