@@ -10,8 +10,7 @@ Endpoints are documented in the openapi.yml file in the root of the project.
 For *first time* install, after the dependancies, you'll need to populate the database with some data.
 
 * Install the dependencies with `yarn install`
-* Generate the Prisma orm client `yarn prisma generate`
-* Create the database schema `yarn prisma db push`
+* Create the database schema & generate client `yarn prisma db push`
 * Insert the card data from `infrastructure/sql` one file per table.
   * :warning: These are stored as sql to keep file size down
 * Seed some players and decks `yarn prisma db seed`
