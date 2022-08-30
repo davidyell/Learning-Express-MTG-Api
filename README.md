@@ -50,7 +50,7 @@ sqlite> .read ./infrastructure/sql/meta.sql
  - [ ] Code for formatting api response shapes
  - [x] Aggregate count of players decks, and decks cards
  - [ ] Create a deck and edit a deck
- - [ ] Validation when creating decks - 4 card max, cast colours with no matching lands, 15 card sideboard, etc
+ - [ ] Validation when creating decks - 4 card max, cast colours with no matching lands, 15 card sideboard, more than 4 lands, etc
  - [x] Specific card endpoint, for FE to see a certain card?
  - [x] Players endpoint
  - [x] Get database under 100mb by removing extra card tables and columns

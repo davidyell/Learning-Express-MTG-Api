@@ -43,5 +43,4 @@ describe('Decks controller', () => {
     expect(result).toEqual(data);
     expect(prismaMock.decks.findMany).toBeCalledTimes(1)
   });
-
 });
