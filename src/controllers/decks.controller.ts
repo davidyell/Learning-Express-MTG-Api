@@ -1,10 +1,8 @@
 import { Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prismaClient from '../../prisma/client';
 
 const index = async (request: Request, response: Response) => {
-  const results = await prisma.decks.findMany({
+  const results = await prismaClient.decks.findMany({
     include: {
       player: true,
       _count: {
@@ -19,7 +17,7 @@ const index = async (request: Request, response: Response) => {
 };
 
 const view = async (request: Request, response: Response) => {
-  const result = await prisma.decks.findUniqueOrThrow({
+  const result = await prismaClient.decks.findUniqueOrThrow({
     where: { id: parseInt(request.params.id, 10) },
     include: {
       player: true,

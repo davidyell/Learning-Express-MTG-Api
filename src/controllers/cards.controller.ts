@@ -1,10 +1,8 @@
 import { Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prismaClient from '../../prisma/client';
 
 const view = async (request: Request, response: Response) => {
-  const result = await prisma.cards.findUniqueOrThrow({
+  const result = await prismaClient.cards.findUniqueOrThrow({
     where: { id: parseInt(request.params.id, 10) },
   });
 

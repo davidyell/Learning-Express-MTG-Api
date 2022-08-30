@@ -1,27 +1,18 @@
-import { mockDeep } from 'jest-mock-extended';
-
-jest.mock('@prisma/client', () => ({
-  __esModule: true,
-  default: mockDeep<PrismaClient>(),
-}));
-
-jest.mock('express');
-
 import { Request, Response } from 'express';
-import { index, view } from './decks.controller'
-import { Decks, PrismaClient } from '@prisma/client';
+import { prismaMock } from '../../prisma/client.mock';
+import { index, view } from './decks.controller';
 
-const mockPrisma = jest.mocked(mockDeep<PrismaClient>());
-const mockRequest = jest.mocked(mockDeep<Request>());
 
 describe('Decks controller', () => {
-  beforeEach(() => {
-    // mockReset(prismaMock);
-  });  
-  
+
+  /**
+   * A low value test as both components of the unit of code are mocked
+   */
   it('should return a json response', async () => {
+    const request = {} as Request;
+
     const response: any = {
-      json: jest.fn(),
+      json: jest.fn((result) => result),
     }
 
     const data: any[] = [
@@ -45,11 +36,12 @@ describe('Decks controller', () => {
       },
     ];
 
-    mockPrisma.decks.findMany.mockResolvedValue(data)
+    prismaMock.decks.findMany.mockResolvedValue(data)
 
-    const result = await index(mockRequest, response);
+    const result = await index(request, response);
 
-    expect(result).toEqual(data)
-    expect(mockPrisma.decks.findMany).toBeCalledTimes(1)
+    expect(result).toEqual(data);
+    expect(prismaMock.decks.findMany).toBeCalledTimes(1)
   });
+
 });
