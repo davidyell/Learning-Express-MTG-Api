@@ -9,10 +9,11 @@ Endpoints are documented in the openapi.yml file in the root of the project.
 ## Installation
 For *first time* install, after the dependancies, you'll need to populate the database with some data.
 
-* Install the dependencies with `yarn install`
-* Create the database schema & generate client `yarn prisma db push`
-* Insert the card data from `infrastructure/sql` one file per table.
-  * :warning: These are stored as sql to keep file size down
+* Install the dependancies with `yarn install`
+* Generate the Prisma orm client `yarn prisma generate`
+* Copy the `.env.example` file to `.env` and update your database path
+* Create the database schema `yarn prisma db push`
+* Insert the card data from `infrastructure/sql` using sqlite3 cli, `.read ./infrastructure/sql/import-all.sql` and wait for it finish.
 * Seed some players and decks `yarn prisma db seed`
 * Run the dev server `yarn run dev`
 * Visit http://localhost:3001/api/decks to see some MtG decks
@@ -20,13 +21,13 @@ For *first time* install, after the dependancies, you'll need to populate the da
 Options available in the `.env.example` file.
 
 ### Inserting data into the tables
-I have found it easiest to insert the `sql` files using `sqlite3` on the command line. However 
-it does mean importing each file.
+I have found it easiest to insert the `sql` files using `sqlite3` on the command line. There is a batch script to import all the files. It will take a few minutes.
 
 ```bash
 sqlite3 infrastructure/database.sqlite
 
-sqlite> .read ./infrastructure/sql/meta.sql
+sqlite> .read ./infrastructure/sql/import-all.sql
+sqlite> .quit
 ```
 
 [More information in the Sqlite docs](https://www.sqlite.org/cli.html#reading_sql_from_a_file)
@@ -49,7 +50,7 @@ sqlite> .read ./infrastructure/sql/meta.sql
  - [ ] Code for formatting api response shapes
  - [x] Aggregate count of players decks, and decks cards
  - [ ] Create a deck and edit a deck
- - [ ] Validation when creating decks - 4 card max, cast colours with no matching lands, 15 card sideboard, etc
+ - [ ] Validation when creating decks - 4 card max, cast colours with no matching lands, 15 card sideboard, more than 4 lands, etc
  - [x] Specific card endpoint, for FE to see a certain card?
  - [x] Players endpoint
  - [x] Get database under 100mb by removing extra card tables and columns
