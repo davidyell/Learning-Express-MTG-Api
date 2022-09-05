@@ -48,7 +48,26 @@ const view = async (request: Request, response: Response) => {
   response.json(result);
 };
 
+const create = async (request: Request, response: Response) => {
+  const postData = request.body;
+
+  // TODO: Implement some validation
+
+  const newDeck = await prismaClient.decks.create({
+    data: {
+      name: postData.deck.name,
+      player_id: postData.deck.player_id,
+      cards_in_decks: {
+        create: postData.cards_in_decks,
+      },
+    },
+  });
+
+  response.json(newDeck);
+};
+
 export {
   index,
   view,
+  create,
 };
