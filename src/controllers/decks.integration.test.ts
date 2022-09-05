@@ -1,10 +1,12 @@
 import prismaClient from '../../prisma/client';
 
 describe('Decks integration tests', () => {
-  beforeAll(() => {
-    // TODO: Create a test database
-  });
 
+  /**
+   * TODO: Needs more time investment to create a testing database setup, which is entirely manual, for now this test will create a deck in the 'main' database
+   * 
+   * @see https://github.com/prisma/prisma/discussions/2792
+   */
   it('should create a new deck', async () => {
     const player = await prismaClient.players.findFirst();
     if (player === null) throw Error('No players found');
