@@ -64,7 +64,7 @@ describe('Validating a decks cards', () => {
     expect(result[0].color).toEqual('Red');
   });
 
-  it('should invalidate decks with more than 4 cards of a non-land type', async () => {
+  it('should invalidate decks with more than 4 of a basic card', async () => {
     const newDeck = {...CreateDeck};
     newDeck.cards_in_decks[5].quantity = 9;
 
@@ -81,5 +81,31 @@ describe('Validating a decks cards', () => {
       name: 'Samurai of the Pale Curtain',
       count: 9
     });
+  });
+
+  it('should invalidate a deck with a sideboard more than 15 cards', async () => {
+    const newDeck = {...CreateDeck};
+    newDeck.cards_in_decks.push({
+      card_id: 260,
+      quantity: 4,
+      is_sideboard: true
+    });
+
+    const cardIds = newDeck.cards_in_decks.map((card) => card.card_id);
+    const cardData = await prismaClient.cards.findMany({ where: { id: { in: cardIds } } });
+    const validator = new DeckValidator(newDeck.cards_in_decks, cardData);
+
+    expect(validator.sideboardSize()).toBeFalsy;
+  });
+
+  it('should invalidate a deck with fewer than 60 cards', async () => {
+    const newDeck = {...CreateDeck};
+    newDeck.cards_in_decks = newDeck.cards_in_decks.slice(0, 8);
+
+    const cardIds = newDeck.cards_in_decks.map((card) => card.card_id);
+    const cardData = await prismaClient.cards.findMany({ where: { id: { in: cardIds } } });
+    const validator = new DeckValidator(newDeck.cards_in_decks, cardData);
+
+    expect(validator.sideboardSize()).toBeFalsy;
   });
 })

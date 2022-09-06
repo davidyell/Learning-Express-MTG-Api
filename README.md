@@ -35,6 +35,8 @@ sqlite> .quit
 ----
 ## References
 
+:mortar_board: Learn to play Magic the Gathering! https://magic.wizards.com/en/intro
+
 :no_good: Not officially affiliated or endorsed by Wizards of the Coast or Magic the Gathering
 
 :bowing_man: Thanks to MTGJSON for their free data https://mtgjson.com/downloads/all-files/
@@ -50,10 +52,11 @@ sqlite> .quit
  - [ ] Code for formatting api response shapes
  - [x] Aggregate count of players decks, and decks cards
  - [ ] Create a deck and edit a deck
- - [ ] Validation when creating decks - 4 card max, cast colours with no matching lands, 15 card sideboard, more than 4 lands, etc
+ - [x] Validation when creating decks - 4 card max, cast colours with no matching lands, 15 card sideboard, more than 4 lands, etc
  - [x] Specific card endpoint, for FE to see a certain card?
  - [x] Players endpoint
  - [x] Get database under 100mb by removing extra card tables and columns
  - [ ] Aggregate deck meta and persist to data storage. eg, Card type counts, mana curve, count by colour, etc
- - [ ] Validator for alternative build formats than Constructed
+ - [ ] Validator for alternative build formats than Constructed / Standard
  - [ ] Enhance validation for multi-colour cards
+ - [ ] Validate decks for legality

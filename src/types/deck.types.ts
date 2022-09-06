@@ -19,7 +19,7 @@ export type PostDeck = {
   cards_in_decks: PostCardsInDecks[]
 };
 
-export type MoreThanFourValidationError = {
+export type MoreThanFourError = {
   card_id: Cards['id'];
   name: Cards['name'];
   count: CardsInDecks['quantity'];
@@ -35,4 +35,12 @@ export enum CardColor {
 
 export type MissingManaError = {
   color: CardColor
+}
+
+export type DeckValidationErrors = {
+  hasLands: boolean;
+  missingManaForColor: MissingManaError[];
+  fourOrMore: MoreThanFourError[];
+  sideboardSize: boolean,
+  deckSize: boolean,
 }

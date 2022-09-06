@@ -57,6 +57,18 @@ const create = async (request: Request, response: Response) => {
   const cardIds = postData.cards_in_decks.map((card) => card.card_id);
   const cardData = await prismaClient.cards.findMany({ where: { id: { in: cardIds } } });
   const validator = new DeckValidator(postData.cards_in_decks, cardData);
+  const isValid = validator.isValid();
+
+  // eslint-disable-next-line no-unused-vars
+  Object.entries(isValid).forEach(([rule, outcome]) => {
+    if (typeof outcome === 'boolean' && outcome === false) {
+      return response.status(400).json({ error: isValid });
+    }
+    if (Array.isArray(outcome) && outcome.length > 0) {
+      return response.status(400).json({ error: isValid });
+    }
+    return true;
+  });
 
   // Save the new deck
   const newDeck = await prismaClient.decks.create({

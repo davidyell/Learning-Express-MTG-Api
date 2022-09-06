@@ -1,6 +1,6 @@
 import { Cards, CardsInDecks } from '@prisma/client';
-import { countBy, isNil, omitBy } from 'lodash';
-import type { MissingManaError, MoreThanFourValidationError } from '../types/deck.types';
+import { countBy, isNil } from 'lodash';
+import type { DeckValidationErrors, MissingManaError, MoreThanFourError } from '../types/deck.types';
 import { CardColor } from '../types/deck.types';
 
 // Define a new type for a deck which allows for both saved and unsaved decks
@@ -19,6 +19,16 @@ export default class DeckValidator {
   constructor(cardsInDecks: PartialCardsInDecks[], cardData: Cards[]) {
     this.cards_in_decks = cardsInDecks;
     this.cards = cardData;
+  }
+
+  isValid(): DeckValidationErrors {
+    return {
+      hasLands: this.hasLands(),
+      missingManaForColor: this.missingManaForColor(),
+      fourOrMore: this.fourOrMore(),
+      sideboardSize: this.sideboardSize(),
+      deckSize: this.deckSize(),
+    };
   }
 
   /**
@@ -40,7 +50,7 @@ export default class DeckValidator {
    * Deck should contain cards which can generate mana for the colors in the deck
    *
    * // TODO: Look for multi-color sources
-   * // TODO: Account for other sources of mana generation like Artefacts
+   * // TODO: Account for other sources of mana generation like artifacts
    */
   missingManaForColor(): MissingManaError[] {
     const colorCount = countBy(this.cards, (value) => value.colorIdentity);
@@ -63,11 +73,11 @@ export default class DeckValidator {
   }
 
   /**
-   * Rule 100.4
+   * Rule 100.2a
    * No more than 4 of any non-basic card including sideboard
    */
-  fourOrMore(): MoreThanFourValidationError[] {
-    const errors: MoreThanFourValidationError[] = [];
+  fourOrMore(): MoreThanFourError[] {
+    const errors: MoreThanFourError[] = [];
 
     // eslint-disable-next-line max-len
     const moreThanFour = this.cards_in_decks.filter((cardsInDeck: PartialCardsInDecks) => cardsInDeck.quantity > 4);
@@ -77,9 +87,9 @@ export default class DeckValidator {
 
       if (cardData !== undefined) {
         if (!isNil(cardData.supertypes) && cardData.supertypes.includes('Basic')) {
-          // noop
+          // noop - Basic supertype cards can be more than 4 in quantity
         } else {
-          const failedCard: MoreThanFourValidationError = {
+          const failedCard: MoreThanFourError = {
             card_id: cardData.id,
             name: cardData.name,
             count: cardInDeck.quantity,
@@ -94,7 +104,7 @@ export default class DeckValidator {
   }
 
   /**
-   * Rule 100.4
+   * Rule 100.4a
    * Sideboard should be 15 or fewer
    */
   sideboardSize(): boolean {
@@ -111,7 +121,8 @@ export default class DeckValidator {
   }
 
   /**
-   * At least 60 cards recommended
+   * Rule 100.2a
+   * At least 60 cards required
    */
   deckSize(): boolean {
     const initial = 0;
@@ -124,12 +135,5 @@ export default class DeckValidator {
     }, initial);
 
     return total >= 60;
-  }
-
-  /**
-   * Check the legalities
-   */
-  isLegal(): boolean {
-    return false;
   }
 }
