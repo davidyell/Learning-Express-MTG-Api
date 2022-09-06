@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import prismaClient from '../../prisma/client';
+import type { PostDeck } from '../types/deck.types';
+import DeckValidator from '../validators/deck.validator';
 
 const index = async (request: Request, response: Response) => {
   const results = await prismaClient.decks.findMany({
@@ -49,10 +51,14 @@ const view = async (request: Request, response: Response) => {
 };
 
 const create = async (request: Request, response: Response) => {
-  const postData = request.body;
+  const postData: PostDeck = request.body;
 
-  // TODO: Implement some validation
+  // Validate the deck
+  const cardIds = postData.cards_in_decks.map((card) => card.card_id);
+  const cardData = await prismaClient.cards.findMany({ where: { id: { in: cardIds } } });
+  const validator = new DeckValidator(postData.cards_in_decks, cardData);
 
+  // Save the new deck
   const newDeck = await prismaClient.decks.create({
     data: {
       name: postData.deck.name,

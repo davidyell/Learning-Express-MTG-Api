@@ -54,3 +54,6 @@ sqlite> .quit
  - [x] Specific card endpoint, for FE to see a certain card?
  - [x] Players endpoint
  - [x] Get database under 100mb by removing extra card tables and columns
+ - [ ] Aggregate deck meta and persist to data storage. eg, Card type counts, mana curve, count by colour, etc
+ - [ ] Validator for alternative build formats than Constructed
+ - [ ] Enhance validation for multi-colour cards
