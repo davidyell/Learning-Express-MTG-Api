@@ -51,7 +51,8 @@ sqlite> .quit
  - [x] Allow the database to be built, rather than downloaded from the repo
  - [ ] Code for formatting api response shapes
  - [x] Aggregate count of players decks, and decks cards
- - [ ] Create a deck and edit a deck
+ - [x] Create a deck
+ - [ ] Edit a deck
  - [x] Validation when creating decks - 4 card max, cast colours with no matching lands, 15 card sideboard, more than 4 lands, etc
  - [x] Specific card endpoint, for FE to see a certain card?
  - [x] Players endpoint
@@ -60,3 +61,22 @@ sqlite> .quit
  - [ ] Validator for alternative build formats than Constructed / Standard
  - [ ] Enhance validation for multi-colour cards
  - [ ] Validate decks for legality
+ - [ ] Github workflow to run tests against PRs
+
+ ## License
+
+MTG Deck Building API
+Copyright (C) 2022 David Yell <neon1024@gmail.com>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
