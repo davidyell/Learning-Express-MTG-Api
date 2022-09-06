@@ -63,8 +63,7 @@ const seeder = async () => {
     throw Error('No cards loaded, please ensure some card data exists in the database');
   }
 
-  // eslint-disable-next-line no-plusplus
-  for (let i = 0; i < 9; i++) {
+  for (let i = 0; i < 9; i += 1) {
     const currentPlayer = _.sample(players) as Players;
 
     // eslint-disable-next-line no-await-in-loop
