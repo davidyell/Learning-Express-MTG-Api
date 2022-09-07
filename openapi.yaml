@@ -1,16 +1,21 @@
 openapi: 3.0.2
 info:
   title: MTG Deck Building App Api
+  description: Api for creating decks for Magic the Gathering
   version: 0.0.1
   contact:
     name: David Yell
     url: 'https://github.com/davidyell/Learning-Express-MTG-Api'
     email: neon1024@gmail.com
   license:
-    name: MIT
-    url: 'https://opensource.org/licenses/MIT'
+    name: GNU GPL3
+    url: 'https://opensource.org/licenses/GPL-3.0'
 servers:
   - url: 'http://localhost:3001'
+tags:
+  - name: decks
+  - name: cards
+  - name: players
 paths:
   /api/decks:
     get:
@@ -22,10 +27,12 @@ paths:
             application/json:
               schema: {}
       parameters: []
+      description: Get a list of all the decks along with the player they belong to and a count of the cards
+      operationId: get.all.decks
       tags:
         - decks
     post:
-      summary: ''
+      summary: Create a new deck
       operationId: post-api-decks
       responses:
         '200':
@@ -58,59 +65,14 @@ paths:
                   - player_id
                   - created
                   - updated
+        '400':
+          $ref: '#/components/responses/Deck-validation-errors'
       description: Create a new deck by posting the information about it
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              additionalProperties: false
-              properties:
-                deck:
-                  type: object
-                  required:
-                    - name
-                    - player_id
-                  additionalProperties: false
-                  properties:
-                    name:
-                      type: string
-                      writeOnly: true
-                    player_id:
-                      type: integer
-                      writeOnly: true
-                  writeOnly: true
-                cards_in_decks:
-                  type: array
-                  items:
-                    type: object
-                    additionalProperties: false
-                    properties:
-                      card_id:
-                        type: integer
-                        writeOnly: true
-                      quantity:
-                        type: integer
-                        writeOnly: true
-                      is_sideboard:
-                        type: boolean
-                        default: false
-                        writeOnly: true
-                    required:
-                      - card_id
-                      - quantity
-                      - is_sideboard
-                    writeOnly: true
-                  writeOnly: true
-              required:
-                - deck
-                - cards_in_decks
-              writeOnly: true
-            examples: {}
-        description: Create a new deck with a name and selection of cards
       parameters: []
       tags:
         - decks
+      requestBody:
+        $ref: '#/components/requestBodies/Deck'
   '/api/decks/{deckId}':
     get:
       summary: View a specific deck
@@ -126,14 +88,137 @@ paths:
           description: OK
           content:
             application/json:
-              schema: {}
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  name:
+                    type: string
+                    readOnly: true
+                  player_id:
+                    type: integer
+                    readOnly: true
+                  created:
+                    type: string
+                  updated:
+                    type: string
+                  player:
+                    type: object
+                    required:
+                      - id
+                      - first_name
+                      - last_name
+                    additionalProperties: false
+                    properties:
+                      id:
+                        type: integer
+                        readOnly: true
+                      first_name:
+                        type: string
+                        readOnly: true
+                      last_name:
+                        type: string
+                        readOnly: true
+                      email:
+                        type: string
+                        readOnly: true
+                      created:
+                        type: string
+                        readOnly: true
+                      avatar:
+                        type: string
+                        readOnly: true
+                    readOnly: true
+                  cards_in_decks:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        deck_id:
+                          type: integer
+                        card_id:
+                          type: integer
+                        quantity:
+                          type: integer
+                        is_sideboard:
+                          type: boolean
+                        cards:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                            colorIdentity:
+                              type: string
+                            convertedManaCost:
+                              type: integer
+                            manaCost:
+                              type: string
+                            manaValue:
+                              type: integer
+                            rarity:
+                              type: string
+                            subtypes:
+                              type: string
+                              nullable: true
+                            supertypes:
+                              type: string
+                              nullable: true
+                            type:
+                              type: string
+                            power:
+                              type: string
+                              nullable: true
+                            toughness:
+                              type: string
+                              nullable: true
+                            text:
+                              type: string
+                required:
+                  - id
+                  - name
+                  - player_id
+                  - player
+                readOnly: true
+              examples: {}
         '404':
           description: Deck not found
           content:
             application/json:
-              schema: {}
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    readOnly: true
       tags:
         - decks
+      description: View a specific deck by id
+      operationId: get.one.deck
+    put:
+      summary: Update an existing deck
+      operationId: deck.put
+      responses:
+        '200':
+          description: OK
+      description: Update a deck with new data
+      requestBody:
+        $ref: '#/components/requestBodies/Deck'
+      tags:
+        - decks
+    parameters:
+      - schema:
+          type: integer
+        name: deckId
+        in: path
+        required: true
+        description: The deck id
   '/api/cards/{cardId}':
     get:
       summary: View a certain cards details
@@ -145,7 +230,7 @@ paths:
           schema:
             type: string
           description: The numerical id of the card to retrieve
-      operationId: ''
+      operationId: view.one.card
       responses:
         '200':
           description: OK
@@ -162,21 +247,23 @@ paths:
   /api/players:
     get:
       summary: Get a list of all players
-      description: ''
+      description: Get a list of all the players and the number of decks they have created
       parameters: []
-      operationId: ''
+      operationId: players.get
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema: {}
+        '404':
+          description: Not Found
       tags:
         - players
   '/api/players/{playerId}':
     get:
       summary: View a single player
-      description: ''
+      description: Get a single player and a list of their decks
       parameters:
         - name: playerId
           in: path
@@ -184,7 +271,7 @@ paths:
           schema:
             type: string
           description: Numerical id of the player
-      operationId: ''
+      operationId: get.player
       responses:
         '200':
           description: OK
@@ -204,7 +291,7 @@ components:
   callbacks: {}
   schemas: {}
   requestBodies:
-    Create-deck:
+    Deck:
       content:
         application/json:
           schema:
@@ -310,3 +397,76 @@ components:
                     quantity: 4
                     is_sideboard: true
       description: Create a brand new deck for a player with a name and a selection of cards
+  responses:
+    Deck-validation-errors:
+      description: Response when a deck fails validation
+      content:
+        application/json:
+          schema:
+            type: object
+            x-examples:
+              example-1:
+                error:
+                  hasLands: true
+                  missingManaForColor:
+                    - color: Red
+                  fourOrMore:
+                    - card_id: 13422
+                      name: 'Shinka, the Bloodsoaked Keep'
+                      count: 9
+                  sideboardSize: true
+                  deckSize: true
+            additionalProperties: false
+            properties:
+              error:
+                type: object
+                required:
+                  - hasLands
+                  - missingManaForColor
+                  - fourOrMore
+                  - sideboardSize
+                  - deckSize
+                additionalProperties: false
+                properties:
+                  hasLands:
+                    type: boolean
+                    readOnly: true
+                  missingManaForColor:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: false
+                      properties:
+                        color:
+                          type: string
+                          readOnly: true
+                      readOnly: true
+                    readOnly: true
+                  fourOrMore:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: false
+                      properties:
+                        card_id:
+                          type: integer
+                          readOnly: true
+                        name:
+                          type: string
+                          readOnly: true
+                        count:
+                          type: integer
+                          minimum: 0
+                          readOnly: true
+                      readOnly: true
+                    readOnly: true
+                  sideboardSize:
+                    type: boolean
+                    readOnly: true
+                  deckSize:
+                    type: boolean
+                    readOnly: true
+                readOnly: true
+            required:
+              - error
+            readOnly: true

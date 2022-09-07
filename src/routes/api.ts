@@ -1,5 +1,11 @@
 import { Router, Request, Response } from 'express';
-import { index as DeckIndex, view as DeckView, create as DeckCreate } from '../controllers/decks.controller';
+import {
+  index as DeckIndex,
+  view as DeckView,
+  create as DeckCreate,
+  edit as DeckEdit,
+  remove as DeckRemove,
+} from '../controllers/decks.controller';
 import { view as CardView } from '../controllers/cards.controller';
 import { index as PlayerIndex, view as PlayerView } from '../controllers/players.controller';
 
@@ -27,6 +33,14 @@ router.get('/api/players/:id', (request: Request, response: Response) => {
 
 router.post('/api/decks', (request: Request, response: Response) => {
   DeckCreate(request, response);
+});
+
+router.put('/api/decks/:id', (request: Request, response: Response) => {
+  DeckEdit(request, response);
+});
+
+router.delete('/api/decks/:id', (request: Request, response: Response) => {
+  DeckRemove(request, response);
 });
 
 export default router;
