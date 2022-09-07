@@ -53,11 +53,6 @@ const view = async (request: Request, response: Response) => {
     response.status(404).json({ error: 'No deck found' });
   }
 };
-    },
-  });
-
-  response.json(result);
-};
 
 const create = async (request: Request, response: Response) => {
   const postData: PostDeck = request.body;
@@ -93,8 +88,44 @@ const create = async (request: Request, response: Response) => {
   response.json(newDeck);
 };
 
+const edit = async (request: Request, response: Response) => {
+  const postData: PostDeck = request.body;
+
+  // Validate the deck
+  const cardIds = postData.cards_in_decks.map((card) => card.card_id);
+  const cardData = await prismaClient.cards.findMany({ where: { id: { in: cardIds } } });
+  const validator = new DeckValidator(postData.cards_in_decks, cardData);
+  const isValid = validator.isValid();
+
+  // eslint-disable-next-line no-unused-vars
+  Object.entries(isValid).forEach(([rule, outcome]) => {
+    if (typeof outcome === 'boolean' && outcome === false) {
+      return response.status(400).json({ error: isValid });
+    }
+    if (Array.isArray(outcome) && outcome.length > 0) {
+      return response.status(400).json({ error: isValid });
+    }
+    return true;
+  });
+
+  // Update the deck
+
+  // TODO: Update the deck information if it's changed
+  // TODO: Delete or update the existing cards_in_decks
+  // TODO: Return the newly edited deck with all it's cards just like view
+  // TODO: Perhaps refactor the shared query for 'viewing a deck' into a repository?
+  response.json({ data: 'Your updated deck goes here' });
+};
+
+const remove = async (request: Request, response: Response) => {
+  // TODO: Remove the deck and all the related cards_in_decks records
+  response.json({ data: 'A message to confirm deletion' });
+};
+
 export {
   index,
   view,
   create,
+  edit,
+  remove,
 };
