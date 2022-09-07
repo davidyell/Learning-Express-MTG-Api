@@ -37,8 +37,24 @@ jobs:
           # Used to specify a package manager for caching in the default directory. Supported values: npm, yarn, pnpm.
           cache: yarn
 
-      # Runs a set of commands using the runners shell
-      - name: Install with Yarn and run tests
+      - name: Setup the environment
         run: |
-          yarn install
+          echo PORT="3001" >> .env
+          echo DATABASE_URL="${GITHUB_WORKSPACE}/infrastructure/database.sqlite" >> .env
+          
+      - name: Install dependencies
+        run: yarn install
+          
+      - name: Setup the database & ORM
+        run: |
+          yarn prisma generate
+          yarn prisma db push
+      
+      - name: Insert data into database
+        run: |
+          sqlite3 -init ${GITHUB_WORKSPACE}/infrastructure/sql/import-all.sql ${GITHUB_WORKSPACE}/infrastructure/database.sqlite
+          yarn prisma db seed
+
+      - name: Run test suite
+        run: |
           yarn test
