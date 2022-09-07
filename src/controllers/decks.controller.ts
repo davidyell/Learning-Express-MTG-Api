@@ -104,8 +104,7 @@ const edit = async (request: Request, response: Response) => {
   const isValid = validator.isValid();
 
   try {
-  // eslint-disable-next-line no-unused-vars
-    Object.entries(isValid).forEach(([rule, outcome]) => {
+    Object.entries(isValid).forEach(([, outcome]) => {
       if (typeof outcome === 'boolean' && outcome === false) {
         throw new Error('Failed validation');
       }
