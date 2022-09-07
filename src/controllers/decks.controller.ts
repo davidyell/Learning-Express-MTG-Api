@@ -1,3 +1,4 @@
+import { Decks } from '@prisma/client';
 import { Request, Response } from 'express';
 import prismaClient from '../../prisma/client';
 import type { PostDeck } from '../types/deck.types';
@@ -48,9 +49,9 @@ const view = async (request: Request, response: Response) => {
       },
     });
 
-    response.json(result);
+    return response.json(result);
   } catch (error) {
-    response.status(404).json({ error: 'No deck found' });
+    return response.status(404).json({ error: 'No deck found' });
   }
 };
 
@@ -63,16 +64,20 @@ const create = async (request: Request, response: Response) => {
   const validator = new DeckValidator(postData.cards_in_decks, cardData);
   const isValid = validator.isValid();
 
+  try {
   // eslint-disable-next-line no-unused-vars
-  Object.entries(isValid).forEach(([rule, outcome]) => {
-    if (typeof outcome === 'boolean' && outcome === false) {
-      return response.status(400).json({ error: isValid });
-    }
-    if (Array.isArray(outcome) && outcome.length > 0) {
-      return response.status(400).json({ error: isValid });
-    }
-    return true;
-  });
+    Object.entries(isValid).forEach(([rule, outcome]) => {
+      if (typeof outcome === 'boolean' && outcome === false) {
+        throw new Error('Failed validation');
+      }
+      if (Array.isArray(outcome) && outcome.length > 0) {
+        throw new Error('Failed validation');
+      }
+      return true;
+    });
+  } catch (error) {
+    return response.status(400).json({ error: isValid });
+  }
 
   // Save the new deck
   const newDeck = await prismaClient.decks.create({
@@ -85,11 +90,12 @@ const create = async (request: Request, response: Response) => {
     },
   });
 
-  response.json(newDeck);
+  return response.json(newDeck);
 };
 
 const edit = async (request: Request, response: Response) => {
   const postData: PostDeck = request.body;
+  const deckId: Decks['id'] = parseInt(request.params.id, 10);
 
   // Validate the deck
   const cardIds = postData.cards_in_decks.map((card) => card.card_id);
@@ -97,29 +103,43 @@ const edit = async (request: Request, response: Response) => {
   const validator = new DeckValidator(postData.cards_in_decks, cardData);
   const isValid = validator.isValid();
 
+  try {
   // eslint-disable-next-line no-unused-vars
-  Object.entries(isValid).forEach(([rule, outcome]) => {
-    if (typeof outcome === 'boolean' && outcome === false) {
-      return response.status(400).json({ error: isValid });
-    }
-    if (Array.isArray(outcome) && outcome.length > 0) {
-      return response.status(400).json({ error: isValid });
-    }
-    return true;
-  });
+    Object.entries(isValid).forEach(([rule, outcome]) => {
+      if (typeof outcome === 'boolean' && outcome === false) {
+        throw new Error('Failed validation');
+      }
+      if (Array.isArray(outcome) && outcome.length > 0) {
+        throw new Error('Failed validation');
+      }
+      return true;
+    });
+  } catch (error) {
+    return response.status(400).json({ error: isValid });
+  }
 
   // Update the deck
+  const deck = await prismaClient.decks.update({
+    where: { id: deckId },
+    data: {
+      name: postData.deck.name,
+      cards_in_decks: {
+        deleteMany: { deck_id: deckId },
+        create: postData.cards_in_decks,
+      },
+    },
+  });
 
   // TODO: Update the deck information if it's changed
   // TODO: Delete or update the existing cards_in_decks
   // TODO: Return the newly edited deck with all it's cards just like view
   // TODO: Perhaps refactor the shared query for 'viewing a deck' into a repository?
-  response.json({ data: 'Your updated deck goes here' });
+  return response.json(deck);
 };
 
 const remove = async (request: Request, response: Response) => {
   // TODO: Remove the deck and all the related cards_in_decks records
-  response.json({ data: 'A message to confirm deletion' });
+  return response.json({ data: 'A message to confirm deletion' });
 };
 
 export {
