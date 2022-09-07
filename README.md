@@ -59,7 +59,7 @@ sqlite> .quit
  - [x] Get database under 100mb by removing extra card tables and columns
  - [ ] Aggregate deck meta and persist to data storage. eg, Card type counts, mana curve, count by colour, etc
  - [ ] Validator for alternative build formats than Constructed / Standard
- - [ ] Enhance validation for multi-colour cards
+ - [x] Enhance validation for multi-colour cards
  - [ ] Validate decks for legality
  - [x] Github action to run tests against PRs
 
