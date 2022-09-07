@@ -53,6 +53,12 @@ export default class DeckValidator {
    * // TODO: Account for other sources of mana generation like artifacts
    */
   missingManaForColor(): MissingManaError[] {
+    // TODO: Collate all the colours of cards from their manaCost
+    const manaCosts = this.cards.map((card: Cards) => card.manaCost);
+    console.log(manaCosts);
+
+    const errors: MissingManaError[] = [];
+    /*
     const colorCount = countBy(this.cards, (value) => value.colorIdentity);
 
     const errors: MissingManaError[] = [];
@@ -66,8 +72,15 @@ export default class DeckValidator {
 
           errors.push(error);
         }
+      } else if (!isNil(color) && color !== 'null' && color.includes(',') === true) {
+        const manaCodeRegex = /{[\d]}?({([WBRGU/]+)})?({([WBRGU/]+)})?({([WBRGU/]+)})?({([WBRGU/]+)})?({([WBRGU/]+)})?/gm;
+        // TODO: Regex match on the card.manaCost
+        const colors = color.matchAll(manaCodeRegex);
+        console.log([...colors]);
       }
+      
     });
+    */
 
     return errors;
   }

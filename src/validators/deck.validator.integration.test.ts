@@ -1,6 +1,7 @@
 import DeckValidator from './deck.validator';
 import CreateDeck from '../tests/fixtures/create.deck';
 import prismaClient from '../../prisma/client';
+import { CardsInDecks } from '@prisma/client';
 
 describe('Validating a decks cards', () => {
   beforeAll(() => {
@@ -107,5 +108,46 @@ describe('Validating a decks cards', () => {
     const validator = new DeckValidator(newDeck.cards_in_decks, cardData);
 
     expect(validator.sideboardSize()).toBeFalsy;
+  });
+
+  it('should detect missing mana for multi-color cards', async () => {
+    const multiColorCards = [
+      {
+        "id": 7666,
+        "name": "Giant Ambush Beetle",
+        "types": "Creature",
+        "supertypes": null,
+        "colorIdentity": "B,G,R",
+        "manaCost": "{3}{B/G}{R}",
+        "manaValue": 5.0
+      },
+      {
+        "id": 10898,
+        "name": "O-Kagachi, Vengeful Kami",
+        "types": "Creature",
+        "supertypes": "Legendary",
+        "colorIdentity": "B,G,R,U,W",
+        "manaCost": "{1}{W}{U}{B}{R}{G}",
+        "manaValue": 6.0
+      }
+    ]
+
+    const newDeck = {...CreateDeck};
+    const newCards = multiColorCards.map((card) => {
+      return { card_id: card.id, quantity: 1, is_sideboard: false };
+    })
+    newDeck.cards_in_decks.push(newCards[0], newCards[1]);
+
+    const cardIds = newDeck.cards_in_decks.map((card) => card.card_id);
+    const cardData = await prismaClient.cards.findMany({ where: { id: { in: cardIds } } });
+    const validator = new DeckValidator(newDeck.cards_in_decks, cardData);
+
+    const result = validator.missingManaForColor();
+
+    expect(result).toBeInstanceOf(Array);
+    expect(result).toHaveLength(3);
+    expect(result[0]).toStrictEqual({ color: 'Black'});
+    expect(result[1]).toStrictEqual({ color: 'Green'});
+    expect(result[1]).toStrictEqual({ color: 'Blue'});
   });
 })
