@@ -49,7 +49,7 @@ export default class DeckValidator {
   /**
    * Deck should contain cards which can generate mana for the colors in the deck
    *
-   * // TODO: Look for multi-color sources
+   * // TODO: Look for multi-color cards & sources
    * // TODO: Account for other sources of mana generation like artifacts
    */
   missingManaForColor(): MissingManaError[] {
@@ -58,7 +58,7 @@ export default class DeckValidator {
     const errors: MissingManaError[] = [];
 
     Object.entries(colorCount).forEach(([color]) => {
-      if (!isNil(color) && color !== 'null') {
+      if (!isNil(color) && color !== 'null' && color.includes(',') === false) {
         if (this.hasLands(color as CardColor) === false) {
           const error: MissingManaError = {
             color: CardColor[color as unknown as keyof typeof CardColor],
