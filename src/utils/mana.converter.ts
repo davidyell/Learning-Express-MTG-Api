@@ -14,6 +14,9 @@ const manaStringToArray = (manaCost: string | null): string[] => {
     return [];
   }
 
+  // TODO: Could you use a forEach with a shorthand check and assignment?
+  // cardColors[0][index] !== undefined ? requiredColors.push(cardColors[0][1]) : null;
+
   if (cardColors[0][1] !== undefined) {
     requiredColors.push(cardColors[0][1]);
   }
