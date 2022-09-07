@@ -62,6 +62,8 @@ sqlite> .quit
  - [ ] Validate decks for legality
  - [x] Github action to run tests against PRs
  - [ ] Create CI sqlite3 import script which reduces the data inserted
+ - [ ] Complete open api spec response body definitions
+ - [ ] Refactor shared open api spec responses into schemas
 
  ## License
 
