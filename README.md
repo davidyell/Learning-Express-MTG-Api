@@ -61,7 +61,7 @@ sqlite> .quit
  - [ ] Validator for alternative build formats than Constructed / Standard
  - [ ] Enhance validation for multi-colour cards
  - [ ] Validate decks for legality
- - [ ] Github workflow to run tests against PRs
+ - [x] Github action to run tests against PRs
 
  ## License
 
