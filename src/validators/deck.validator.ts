@@ -1,5 +1,8 @@
 import { Cards, CardsInDecks } from '@prisma/client';
-import { countBy, isNil } from 'lodash';
+import {
+  isEqual, isNil, uniq, uniqWith,
+} from 'lodash';
+import manaStringToArray from '../utils/mana.converter';
 import type { DeckValidationErrors, MissingManaError, MoreThanFourError } from '../types/deck.types';
 import { CardColor } from '../types/deck.types';
 
@@ -32,7 +35,7 @@ export default class DeckValidator {
   }
 
   /**
-   * Deck should contain some cards capable of generating mana
+   * Decks should really contain some lands to generate mana
    */
   hasLands(color?: CardColor): boolean {
     const foundLand = this.cards.find((card: Cards) => {
@@ -49,27 +52,37 @@ export default class DeckValidator {
   /**
    * Deck should contain cards which can generate mana for the colors in the deck
    *
-   * // TODO: Look for multi-color cards & sources
    * // TODO: Account for other sources of mana generation like artifacts
    */
   missingManaForColor(): MissingManaError[] {
-    const colorCount = countBy(this.cards, (value) => value.colorIdentity);
-
+    let allRequiredColors: string[] = [];
     const errors: MissingManaError[] = [];
 
-    Object.entries(colorCount).forEach(([color]) => {
-      if (!isNil(color) && color !== 'null' && color.includes(',') === false) {
-        if (this.hasLands(color as CardColor) === false) {
-          const error: MissingManaError = {
-            color: CardColor[color as unknown as keyof typeof CardColor],
-          };
+    this.cards.forEach((card) => {
+      allRequiredColors = allRequiredColors.concat(manaStringToArray(card.manaCost));
+    });
 
-          errors.push(error);
+    allRequiredColors = uniq(allRequiredColors);
+
+    allRequiredColors.forEach((color) => {
+      if (!color.includes('/')) {
+        if (this.hasLands(color as CardColor) === false) {
+          errors.push({
+            color: CardColor[color as unknown as keyof typeof CardColor],
+          });
         }
+      } else {
+        color.split('/').forEach((orColor) => {
+          if (this.hasLands(orColor as CardColor) === false) {
+            errors.push({
+              color: CardColor[orColor as unknown as keyof typeof CardColor],
+            });
+          }
+        });
       }
     });
 
-    return errors;
+    return uniqWith(errors, isEqual);
   }
 
   /**
