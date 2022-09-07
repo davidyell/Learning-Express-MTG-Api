@@ -129,17 +129,10 @@ const edit = async (request: Request, response: Response) => {
     },
   });
 
-  // TODO: Update the deck information if it's changed
-  // TODO: Delete or update the existing cards_in_decks
-  // TODO: Return the newly edited deck with all it's cards just like view
-  // TODO: Perhaps refactor the shared query for 'viewing a deck' into a repository?
   return response.json(deck);
 };
 
-const remove = async (request: Request, response: Response) => {
-  // TODO: Remove the deck and all the related cards_in_decks records
-  return response.json({ data: 'A message to confirm deletion' });
-};
+const remove = async (request: Request, response: Response) => response.json({ data: 'A message to confirm deletion' });
 
 export {
   index,

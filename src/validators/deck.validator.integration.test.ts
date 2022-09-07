@@ -148,6 +148,6 @@ describe('Validating a decks cards', () => {
     expect(result).toHaveLength(3);
     expect(result[0]).toStrictEqual({ color: 'Black'});
     expect(result[1]).toStrictEqual({ color: 'Green'});
-    expect(result[1]).toStrictEqual({ color: 'Blue'});
+    expect(result[2]).toStrictEqual({ color: 'Blue'});
   });
 })

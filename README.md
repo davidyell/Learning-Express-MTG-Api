@@ -45,14 +45,13 @@ sqlite> .quit
 # :hammer_and_wrench: TODO
  - [x] Setup correct auto-reload and restart Express when files change in package.json
  - [x] Normalise the database to separate cards and counts
- - [ ] Implement cross-env
  - [ ] Implement a basic Docker container
  - [ ] Automated card data download and install into database
  - [x] Allow the database to be built, rather than downloaded from the repo
  - [ ] Code for formatting api response shapes
  - [x] Aggregate count of players decks, and decks cards
  - [x] Create a deck
- - [ ] Edit a deck
+ - [x] Edit a deck
  - [x] Validation when creating decks - 4 card max, cast colours with no matching lands, 15 card sideboard, more than 4 lands, etc
  - [x] Specific card endpoint, for FE to see a certain card?
  - [x] Players endpoint
@@ -62,6 +61,7 @@ sqlite> .quit
  - [x] Enhance validation for multi-colour cards
  - [ ] Validate decks for legality
  - [x] Github action to run tests against PRs
+ - [ ] Create CI sqlite3 import script which reduces the data inserted
 
  ## License
 
