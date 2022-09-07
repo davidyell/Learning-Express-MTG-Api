@@ -55,6 +55,8 @@ jobs:
           sqlite3 -init ${GITHUB_WORKSPACE}/infrastructure/sql/import-all.sql ${GITHUB_WORKSPACE}/infrastructure/database.sqlite
           yarn prisma db seed
 
+      - name: Run eslint
+        run: yarn run lint:ci
+
       - name: Run test suite
-        run: |
-          yarn test
+        run: yarn test
