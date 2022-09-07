@@ -1,5 +1,5 @@
 import  { test } from '@jest/globals';
-import { manaStringToArray } from './mana.converter';
+import manaStringToArray from './mana.converter';
 
 test.each([
   { manaCost: '{3}{B/G}{R}', expected: ['B/G', 'R'] },
@@ -8,8 +8,10 @@ test.each([
   { manaCost: '{2}{W}{W}', expected: ['W'] },
   { manaCost: null, expected: [] },
   { manaCost: '{G}{W}', expected: ['G', 'W'] },
-  { manaCost: '{3}', expected: [] }
-])('Can convert $manaCost cost into $expected', ({ manaCost, expected }) => {
+  { manaCost: '{3}', expected: [] },
+  { manaCost: '{W}{W}{U}{U}{B}{B}{R}{R}{G}{G}', 'expected': ['W', 'U', 'B', 'R', 'G'] }
+])('Can convert $manaCost into $expected', ({ manaCost, expected }) => {
   const result = manaStringToArray(manaCost);
   expect(result).toStrictEqual(expected);
 });
+  
