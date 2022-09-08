@@ -109,7 +109,7 @@ paths:
           required: true
           description: The id of the deck to retrieve
           schema:
-            type: number
+            type: integer
       responses:
         '200':
           description: OK
@@ -274,7 +274,7 @@ paths:
           in: path
           required: true
           schema:
-            type: string
+            type: integer
           description: The numerical id of the card to retrieve
       operationId: view.one.card
       responses:
@@ -564,7 +564,7 @@ paths:
           in: path
           required: true
           schema:
-            type: string
+            type: integer
           description: Numerical id of the player
       operationId: get.player
       responses:

@@ -1,5 +1,8 @@
-import { Decks } from '@prisma/client';
+import type { Decks } from '@prisma/client';
 import { Request, Response } from 'express';
+import deckEncoder from '../encoders/deck.encoder';
+import playerEncoder from '../encoders/player.encoder';
+import cardInDeckEncoder from '../encoders/cardInDeck.encoder';
 import prismaClient from '../../prisma/client';
 import type { PostDeck } from '../types/deck.types';
 import DeckValidator from '../validators/deck.validator';
@@ -16,7 +19,18 @@ const index = async (request: Request, response: Response) => {
     },
   });
 
-  return response.json(results);
+  const responseData = {
+    data: results.map((result) => ({
+      deck: deckEncoder(result),
+      player: playerEncoder(result.player),
+      meta: {
+        // eslint-disable-next-line no-underscore-dangle
+        card_count: result._count.cards_in_decks,
+      },
+    })),
+  };
+
+  return response.json(responseData);
 };
 
 const view = async (request: Request, response: Response) => {
@@ -27,29 +41,21 @@ const view = async (request: Request, response: Response) => {
         player: true,
         cards_in_decks: {
           include: {
-            cards: {
-              select: {
-                id: true,
-                name: true,
-                colorIdentity: true,
-                convertedManaCost: true,
-                manaCost: true,
-                manaValue: true,
-                rarity: true,
-                subtypes: true,
-                supertypes: true,
-                type: true,
-                power: true,
-                toughness: true,
-                text: true,
-              },
-            },
+            cards: true,
           },
         },
       },
     });
 
-    return response.json(result);
+    const responseData = {
+      data: {
+        deck: deckEncoder(result),
+        player: playerEncoder(result.player),
+        cards_in_deck: result.cards_in_decks.map((cardInDeck) => cardInDeckEncoder(cardInDeck)),
+      },
+    };
+
+    return response.json(responseData);
   } catch (error) {
     return response.status(404).json({ error: 'No deck found' });
   }
@@ -65,8 +71,7 @@ const create = async (request: Request, response: Response) => {
   const isValid = validator.isValid();
 
   try {
-  // eslint-disable-next-line no-unused-vars
-    Object.entries(isValid).forEach(([rule, outcome]) => {
+    Object.values(isValid).forEach((outcome) => {
       if (typeof outcome === 'boolean' && outcome === false) {
         throw new Error('Failed validation');
       }
@@ -90,7 +95,13 @@ const create = async (request: Request, response: Response) => {
     },
   });
 
-  return response.json(newDeck);
+  const responseData = {
+    data: {
+      deck: deckEncoder(newDeck),
+    },
+  };
+
+  return response.json(responseData);
 };
 
 const edit = async (request: Request, response: Response) => {
@@ -118,7 +129,7 @@ const edit = async (request: Request, response: Response) => {
   }
 
   // Update the deck
-  const deck = await prismaClient.decks.update({
+  const updatedDeck = await prismaClient.decks.update({
     where: { id: deckId },
     data: {
       name: postData.deck.name,
@@ -129,7 +140,13 @@ const edit = async (request: Request, response: Response) => {
     },
   });
 
-  return response.json(deck);
+  const responseData = {
+    data: {
+      deck: deckEncoder(updatedDeck),
+    },
+  };
+
+  return response.json(responseData);
 };
 
 const remove = async (request: Request, response: Response) => response.json({ data: 'A message to confirm deletion' });
