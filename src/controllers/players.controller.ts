@@ -16,14 +16,18 @@ const index = async (request: Request, response: Response) => {
 };
 
 const view = async (request: Request, response: Response) => {
-  const result = await prismaClient.players.findUniqueOrThrow({
-    where: { id: parseInt(request.params.id, 10) },
-    include: {
-      decks: true,
-    },
-  });
+  try {
+    const result = await prismaClient.players.findUniqueOrThrow({
+      where: { id: parseInt(request.params.id, 10) },
+      include: {
+        decks: true,
+      },
+    });
 
-  return response.json(result);
+    return response.json(result);
+  } catch (error) {
+    return response.status(404).json({ error: 'Player not found' });
+  }
 };
 
 export {
