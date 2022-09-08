@@ -5,13 +5,13 @@ info:
   version: 0.0.1
   contact:
     name: David Yell
-    url: 'https://github.com/davidyell/Learning-Express-MTG-Api'
+    url: "https://github.com/davidyell/Learning-Express-MTG-Api"
     email: neon1024@gmail.com
   license:
     name: GNU GPL3
-    url: 'https://opensource.org/licenses/GPL-3.0'
+    url: "https://opensource.org/licenses/GPL-3.0"
 servers:
-  - url: 'http://localhost:3001'
+  - url: "http://localhost:3001"
 tags:
   - name: decks
   - name: cards
@@ -21,11 +21,62 @@ paths:
     get:
       summary: List all available decks
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
-              schema: {}
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    id:
+                      type: integer
+                      readOnly: true
+                    name:
+                      type: string
+                      readOnly: true
+                    player_id:
+                      type: integer
+                      readOnly: true
+                    created:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                    updated:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                    player:
+                      type: object
+                      additionalProperties: false
+                      properties:
+                        id:
+                          type: integer
+                          readOnly: true
+                        first_name:
+                          type: string
+                          readOnly: true
+                        last_name:
+                          type: string
+                          readOnly: true
+                        email:
+                          type: string
+                          readOnly: true
+                        created:
+                          type: string
+                          format: date-time
+                          readOnly: true
+                        avatar:
+                          type: string
+                          readOnly: true
+                    _count:
+                      type: object
+                      additionalProperties: false
+                      properties:
+                        cards_in_decks:
+                          type: integer
       parameters: []
       description: Get a list of all the decks along with the player they belong to and a count of the cards
       operationId: get.all.decks
@@ -33,47 +84,24 @@ paths:
         - decks
     post:
       summary: Create a new deck
-      operationId: post-api-decks
+      operationId: create.new.deck
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    readOnly: true
-                  name:
-                    type: string
-                    readOnly: true
-                  player_id:
-                    type: integer
-                    readOnly: true
-                  created:
-                    type: string
-                    format: date-time
-                    readOnly: true
-                  updated:
-                    type: string
-                    format: date-time
-                    readOnly: true
-                required:
-                  - id
-                  - name
-                  - player_id
-                  - created
-                  - updated
-        '400':
-          $ref: '#/components/responses/Deck-validation-errors'
+                $ref: "#/components/schemas/Deck"
+        "400":
+          decription: Bad request
+          $ref: "#/components/responses/Deck-validation-errors"
       description: Create a new deck by posting the information about it
       parameters: []
       tags:
         - decks
       requestBody:
-        $ref: '#/components/requestBodies/Deck'
-  '/api/decks/{deckId}':
+        $ref: "#/components/requestBodies/Deck"
+  "/api/decks/{deckId}":
     get:
       summary: View a specific deck
       parameters:
@@ -84,7 +112,7 @@ paths:
           schema:
             type: number
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -187,7 +215,7 @@ paths:
                   - player
                 readOnly: true
               examples: {}
-        '404':
+        "404":
           description: Deck not found
           content:
             application/json:
@@ -205,11 +233,18 @@ paths:
       summary: Update an existing deck
       operationId: deck.put
       responses:
-        '200':
+        "200":
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Deck"
+        "400":
+          decription: Bad request
+          $ref: "#/components/responses/Deck-validation-errors"
       description: Update a deck with new data
       requestBody:
-        $ref: '#/components/requestBodies/Deck'
+        $ref: "#/components/requestBodies/Deck"
       tags:
         - decks
     parameters:
@@ -219,7 +254,7 @@ paths:
         in: path
         required: true
         description: The deck id
-  '/api/cards/{cardId}':
+  "/api/cards/{cardId}":
     get:
       summary: View a certain cards details
       description: Provides a more in-depth set of data about a card
@@ -232,12 +267,12 @@ paths:
           description: The numerical id of the card to retrieve
       operationId: view.one.card
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema: {}
-        '404':
+        "404":
           description: Card not found
           content:
             application/json:
@@ -251,16 +286,16 @@ paths:
       parameters: []
       operationId: players.get
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema: {}
-        '404':
+        "404":
           description: Not Found
       tags:
         - players
-  '/api/players/{playerId}':
+  "/api/players/{playerId}":
     get:
       summary: View a single player
       description: Get a single player and a list of their decks
@@ -273,25 +308,57 @@ paths:
           description: Numerical id of the player
       operationId: get.player
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema: {}
-        '404':
+        "404":
           description: Player not found
           content:
             application/json:
               schema: {}
       tags:
         - players
+
 security: []
+
 components:
   links: {}
+
   callbacks: {}
-  schemas: {}
+
+  schemas:
+    Deck:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        player_id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+        - id
+        - name
+        - player_id
+        - created
+        - updated
+
   requestBodies:
     Deck:
+      description: Create a brand new deck for a player with a name and a selection of cards
       content:
         application/json:
           schema:
@@ -396,7 +463,7 @@ components:
                   - card_id: 286
                     quantity: 4
                     is_sideboard: true
-      description: Create a brand new deck for a player with a name and a selection of cards
+
   responses:
     Deck-validation-errors:
       description: Response when a deck fails validation
@@ -412,7 +479,7 @@ components:
                     - color: Red
                   fourOrMore:
                     - card_id: 13422
-                      name: 'Shinka, the Bloodsoaked Keep'
+                      name: "Shinka, the Bloodsoaked Keep"
                       count: 9
                   sideboardSize: true
                   deckSize: true
