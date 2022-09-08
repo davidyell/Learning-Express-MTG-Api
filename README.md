@@ -62,7 +62,7 @@ sqlite> .quit
  - [ ] Implement a basic Docker container
  - [ ] Automated card data download and install into database
  - [x] Allow the database to be built, rather than downloaded from the repo
- - [ ] Code for formatting api response shapes
+ - [x] Code for formatting api response shapes
  - [x] Aggregate count of players decks, and decks cards
  - [x] Create a deck
  - [x] Edit a deck
