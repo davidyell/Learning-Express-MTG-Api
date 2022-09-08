@@ -1,7 +1,6 @@
 import DeckValidator from './deck.validator';
 import CreateDeck from '../tests/fixtures/create.deck';
 import prismaClient from '../../prisma/client';
-import { CardsInDecks } from '@prisma/client';
 
 describe('Validating a decks cards', () => {
   beforeAll(() => {
