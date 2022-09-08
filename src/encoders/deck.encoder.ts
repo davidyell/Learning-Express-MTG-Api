@@ -4,10 +4,10 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 
 dayjs.extend(relativeTime);
 
-const DeckEncoder = (deck: Decks) => ({
+const deckEncoder = (deck: Decks) => ({
   id: deck.id,
   name: deck.name,
-  updatedAgo: dayjs(deck.updated).fromNow(),
+  updated_ago: dayjs(deck.updated).fromNow(),
 });
 
-export default DeckEncoder;
+export default deckEncoder;
