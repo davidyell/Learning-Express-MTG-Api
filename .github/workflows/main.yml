@@ -74,8 +74,11 @@ jobs:
           node-version: 16
           cache: yarn
 
-      - name: Install Swagger/OpenAPI CLI
-        run: npm install -g @apidevtools/swagger-cli
+      - name: Install dependencies
+        run: yarn install
       
-      - name: Validate OpenAPI schema
-        run: npx swagger-cli validate ${GITHUB_WORKSPACE}/openapi.yaml
+      - name: Build
+        run: yarn run openapi:build
+
+      - name: Validate
+        run: yarn run openapi:validate
