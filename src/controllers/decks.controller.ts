@@ -149,7 +149,18 @@ const edit = async (request: Request, response: Response) => {
   return response.json(responseData);
 };
 
-const remove = async (request: Request, response: Response) => response.json({ data: 'A message to confirm deletion' });
+const remove = async (request: Request, response: Response) => {
+  response.json({
+    data: {
+      // TODO: Do the things!
+      todo: [
+        'Implement the delete method',
+        'Write an integration test which deletes the created deck?',
+        'Add a new open api schema definition for the endpoint',
+      ],
+    },
+  });
+};
 
 export {
   index,
