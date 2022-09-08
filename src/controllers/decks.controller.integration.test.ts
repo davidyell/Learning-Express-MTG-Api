@@ -1,7 +1,7 @@
 import prismaClient from '../../prisma/client';
 import ExampleDeck from '../tests/fixtures/create.deck';
 
-describe('Decks integration tests', () => {
+describe('Decks controller integration tests', () => {
 
   /**
    * TODO: Needs more time investment to create a testing database setup, which is entirely manual, for now this test will create a deck in the 'main' database
@@ -12,12 +12,12 @@ describe('Decks integration tests', () => {
     const player = await prismaClient.players.findFirst();
     if (player === null) throw Error('No players found');
 
-    const postData = ExampleDeck;
+    const postData = {...ExampleDeck};
 
     const newDeck = await prismaClient.decks.create({
       data: {
         name: postData.deck.name,
-        player_id: postData.deck.player_id,
+        player_id: player.id,
         cards_in_decks: {
           create: postData.cards_in_decks
         }
