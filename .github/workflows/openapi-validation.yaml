@@ -12,7 +12,7 @@ on:
 
 jobs:
   swagger-validate:
-    name: Run @apidevtools/swagger-cli
+    name: Swagger
     runs-on: ubuntu-latest
 
     steps:
@@ -34,7 +34,7 @@ jobs:
         run: yarn run openapi:validate
 
   stoplight-spectral:
-    name: Run stoplightio/spectral
+    name: Spectral
     runs-on: ubuntu-latest
 
     steps:
@@ -51,6 +51,10 @@ jobs:
       
       - name: Build
         run: yarn run openapi:build
+
+      - name: Create rules file
+        run: |
+          echo 'extends: "spectral:oas"' >> .spectral.yaml
 
       - name: Validate
         uses: stoplightio/spectral-action@v0.8.8

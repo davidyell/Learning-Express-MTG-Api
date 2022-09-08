@@ -1,4 +1,4 @@
-name: CI
+name: Application
 
 on:
   push:
@@ -12,6 +12,7 @@ on:
 
 jobs:
   tests:
+    name: Test suite
     runs-on: ubuntu-latest
 
     steps:
@@ -45,6 +46,7 @@ jobs:
         run: yarn test:ci
 
   lint:
+    name: ESLint
     runs-on: ubuntu-latest
 
     steps:
