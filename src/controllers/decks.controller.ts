@@ -1,5 +1,7 @@
-import { Decks } from '@prisma/client';
+import type { Decks } from '@prisma/client';
 import { Request, Response } from 'express';
+import DeckEncoder from '../encoders/deck.encoder';
+import PlayerEncoder from '../encoders/player.encoder';
 import prismaClient from '../../prisma/client';
 import type { PostDeck } from '../types/deck.types';
 import DeckValidator from '../validators/deck.validator';
@@ -16,7 +18,16 @@ const index = async (request: Request, response: Response) => {
     },
   });
 
-  return response.json(results);
+  const responseData = results.map((result) => ({
+    deck: DeckEncoder(result),
+    player: PlayerEncoder(result.player),
+    meta: {
+      // eslint-disable-next-line no-underscore-dangle
+      card_count: result._count.cards_in_decks,
+    },
+  }));
+
+  return response.json(responseData);
 };
 
 const view = async (request: Request, response: Response) => {
