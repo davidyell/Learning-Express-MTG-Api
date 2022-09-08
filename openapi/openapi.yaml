@@ -1,0 +1,40 @@
+openapi: 3.0.2
+info:
+  title: MTG Deck Building App Api
+  description: Api for creating decks for Magic the Gathering
+  version: 0.0.1
+  contact:
+    name: David Yell
+    url: 'https://github.com/davidyell/Learning-Express-MTG-Api'
+    email: neon1024@gmail.com
+  license:
+    name: GNU GPL3
+    url: 'https://opensource.org/licenses/GPL-3.0'
+
+servers:
+  - url: 'http://localhost:3001'
+
+tags:
+  - name: decks
+  - name: cards
+  - name: players
+
+paths:
+  /api/decks:
+    $ref: './resources/decks/decks.yaml'
+  '/api/decks/{deckId}':
+    $ref: './resources/decks/deck.yaml'
+  '/api/cards/{cardId}':
+    $ref: './resources/cards/card.yaml'
+  /api/players:
+    $ref: './resources/players/players.yaml'
+  '/api/players/{playerId}':
+    $ref: './resources/players/player.yaml'
+
+components:
+  schemas:
+    $ref: './schemas/_root.yaml'
+  responses:
+    $ref: './responses/_root.yaml'
+  requestBodies:
+    $ref: './request-bodies/_root.yaml'

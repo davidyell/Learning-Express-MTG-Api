@@ -1,0 +1,57 @@
+get:
+  summary: List all available decks
+  description: Get a list of all the decks along with the player they belong to and a count of the cards
+  operationId: get.all.decks
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              data: 
+                type: object
+                additionalProperties: false
+                properties:
+                  deck:
+                    $ref: '../../schemas/deck.yaml'
+                  player:
+                    $ref: '../../schemas/player.yaml'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      card_count:
+                        type: integer
+  parameters: []
+  tags:
+    - decks
+
+post:
+  summary: Create a new deck
+  description: Create a new deck by posting the information about it
+  operationId: create.new.deck
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              data: 
+                type: object
+                additionalProperties: false
+                properties:
+                  deck:
+                    $ref: '../../schemas/deck.yaml'
+    '400':
+      $ref: '../../responses/deck-validation-errors.yaml'
+  parameters: []
+  tags:
+    - decks
+  requestBody:
+    $ref: '../../request-bodies/deck-payload.yaml'

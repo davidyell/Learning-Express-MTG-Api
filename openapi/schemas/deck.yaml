@@ -1,0 +1,17 @@
+title: Deck
+description: A single deck
+type: object
+additionalProperties: false
+properties:
+  id:
+    type: integer
+    readOnly: true
+  name:
+    type: string
+    readOnly: true
+  updated_ago:
+    type: string
+    readOnly: true
+required:
+  - id
+  - name

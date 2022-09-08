@@ -1,0 +1,8 @@
+Deck:
+  $ref: './deck.yaml'
+Card:
+  $ref: './card.yaml'
+Player:
+  $ref: './player.yaml'
+CardsInDeck:
+  $ref: './cards-in-deck.yaml'

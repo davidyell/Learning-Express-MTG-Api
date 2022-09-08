@@ -1,0 +1,71 @@
+description: Response when a deck fails validation
+content:
+application/json:
+schema:
+type: object
+x-examples:
+  example-1:
+    error:
+      hasLands: true
+      missingManaForColor:
+        - color: Red
+      fourOrMore:
+        - card_id: 13422
+          name: 'Shinka, the Bloodsoaked Keep'
+          count: 9
+      sideboardSize: true
+      deckSize: true
+additionalProperties: false
+properties:
+  error:
+    type: object
+    required:
+      - hasLands
+      - missingManaForColor
+      - fourOrMore
+      - sideboardSize
+      - deckSize
+    additionalProperties: false
+    properties:
+      hasLands:
+        type: boolean
+        readOnly: true
+      missingManaForColor:
+        type: array
+        items:
+          type: object
+          additionalProperties: false
+          properties:
+            color:
+              type: string
+              readOnly: true
+          readOnly: true
+        readOnly: true
+      fourOrMore:
+        type: array
+        items:
+          type: object
+          additionalProperties: false
+          properties:
+            card_id:
+              type: integer
+              readOnly: true
+            name:
+              type: string
+              readOnly: true
+            count:
+              type: integer
+              minimum: 0
+              readOnly: true
+          readOnly: true
+        readOnly: true
+      sideboardSize:
+        type: boolean
+        readOnly: true
+      deckSize:
+        type: boolean
+        readOnly: true
+    readOnly: true
+required:
+  - error
+readOnly: true

@@ -1,0 +1,26 @@
+get:
+  summary: View a single cards data
+  description: Provides a more in-depth set of data about a card
+  operationId: view.one.card
+  parameters:
+    - name: cardId
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: The numerical id of the card to retrieve
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              data:
+                $ref: '../../schemas/card.yaml'
+    '404':
+      $ref: '../../responses/generic-error.yaml'
+  tags:
+    - cards
