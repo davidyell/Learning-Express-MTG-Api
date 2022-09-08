@@ -1,10 +1,17 @@
 # Magic the Gathering Deck App
-An example app to learn Node.js, Express.js and Typescript
+A project to learn Node.js, Express.js and Typescript
 
 ## What?
-It just provides a json web service with a few endpoints
+It provides a crud [OpenAPI](https://swagger.io/resources/open-api/) json web service with a few endpoints for building Magic the Gathering decks.
 
-Endpoints are documented in the openapi.yml file in the root of the project.
+Endpoints are documented in the [openapi.yml](https://github.com/davidyell/Learning-Express-MTG-Api/blob/main/openapi.yaml) file in the root of the project.
+
+### Visualise the api
+You can import the yaml into the Swagger editor to visualise the api.
+
+* Visit https://editor-next.swagger.io/
+* File > Import URL
+* Enter `https://raw.githubusercontent.com/davidyell/Learning-Express-MTG-Api/main/openapi.yaml`
 
 ## Installation
 For *first time* install, after the dependancies, you'll need to populate the database with some data.
@@ -13,12 +20,10 @@ For *first time* install, after the dependancies, you'll need to populate the da
 * Generate the Prisma orm client `yarn prisma generate`
 * Copy the `.env.example` file to `.env` and update your database path
 * Create the database schema `yarn prisma db push`
-* Insert the card data from `infrastructure/sql` using sqlite3 cli, `.read ./infrastructure/sql/import-all.sql` and wait for it finish.
+* Insert the card data from `infrastructure/sql` using sqlite3 cli, `.read ./infrastructure/sql/import-all.sql` and wait for it finish (roughly 3 minutes).
 * Seed some players and decks `yarn prisma db seed`
 * Run the dev server `yarn run dev`
-* Visit http://localhost:3001/api/decks to see some MtG decks
-
-Options available in the `.env.example` file.
+* Visit http://localhost:3001/api/decks or send a request from [Postman](https://www.postman.com/downloads/) to see some MtG decks
 
 ### Inserting data into the tables
 I have found it easiest to insert the `sql` files using `sqlite3` on the command line. There is a batch script to import all the files. It will take a few minutes.
@@ -41,6 +46,15 @@ sqlite> .quit
 
 :bowing_man: Thanks to MTGJSON for their free data https://mtgjson.com/downloads/all-files/
 
+:thumbsup: [Node.js](https://nodejs.org/en/about/)
+
+:zap: [Typescript](https://www.typescriptlang.org/)  
+
+:earth_africa: [Express](https://expressjs.com/)  
+
+:mortar_board: I bought an excellent Typescript course on Udemy. [Understanding TypeScript - 2022 Edition](https://www.udemy.com/course/understanding-typescript/)
+
+:tv: They also have a great YouTube channel [Academind](https://www.youtube.com/academind)
 
 # :hammer_and_wrench: TODO
  - [x] Setup correct auto-reload and restart Express when files change in package.json
@@ -64,6 +78,7 @@ sqlite> .quit
  - [ ] Create CI sqlite3 import script which reduces the data inserted
  - [ ] Complete open api spec response body definitions
  - [ ] Refactor shared open api spec responses into schemas
+ - [ ] Work to better encapsulate request data validation so it's not all in the controller
 
  ## License
 
