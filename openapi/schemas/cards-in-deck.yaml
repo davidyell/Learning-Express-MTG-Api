@@ -1,0 +1,23 @@
+title: CardsInDeck
+description: Cards in a deck with card data, quantity and sideboard status
+type: object
+properties:
+  card:
+    $ref: './card.yaml'
+  meta:
+    type: object
+    additionalProperties: false
+    properties:
+      quantity:
+        type: integer
+      is_sideboard:
+        type: boolean
+    required:
+      - quantity
+      - is_sideboard
+required:
+  - card
+  - meta
+
+
+

@@ -1,0 +1,44 @@
+description: Response when a deck fails validation
+content:
+  application/json:
+    schema:
+      type: object
+      additionalProperties: false
+      properties:
+        error:
+          type: object
+          required:
+            - hasLands
+            - missingManaForColor
+            - fourOrMore
+            - sideboardSize
+            - deckSize
+          additionalProperties: false
+          properties:
+            hasLands:
+              type: boolean
+            missingManaForColor:
+              type: array
+              items:
+                type: object
+                additionalProperties: false
+                properties:
+                  color:
+                    type: string
+            fourOrMore:
+              type: array
+              items:
+                type: object
+                additionalProperties: false
+                properties:
+                  card_id:
+                    type: integer
+                  name:
+                    type: string
+                  count:
+                    type: integer
+                    minimum: 0
+            sideboardSize:
+              type: boolean
+            deckSize:
+              type: boolean

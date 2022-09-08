@@ -1,0 +1,124 @@
+title: Card
+description: A single card
+type: object
+additionalProperties: false
+properties:
+  id:
+    type: string
+    readOnly: true
+  border_color:
+    type: string
+    nullable: true
+    readOnly: true
+  color_identity:
+    type: string
+    nullable: true
+    readOnly: true
+  color_indicator:
+    type: string
+    nullable: true
+    readOnly: true
+  colors:
+    type: string
+    nullable: true
+    readOnly: true
+  converted_mana_cost:
+    type: integer
+    nullable: true
+    readOnly: true
+  flavor_name:
+    type: string
+    nullable: true
+    readOnly: true
+  flavor_text:
+    type: string
+    nullable: true
+    readOnly: true
+  keywords:
+    type: string
+    nullable: true
+    readOnly: true
+  layout:
+    type: string
+    nullable: true
+    readOnly: true
+  mana_cost:
+    type: string
+    nullable: true
+    readOnly: true
+  mana_value:
+    type: integer
+    nullable: true
+    readOnly: true
+  multiverseId:
+    type: string
+    nullable: true
+    readOnly: true
+  name:
+    type: string
+    nullable: true
+    readOnly: true
+  power:
+    type: string
+    nullable: true
+    readOnly: true
+  rarity:
+    type: string
+    nullable: true
+    readOnly: true
+  set_code:
+    type: string
+    nullable: true
+    readOnly: true
+  subtypes:
+    type: string
+    nullable: true
+    readOnly: true
+  supertypes:
+    type: string
+    nullable: true
+    readOnly: true
+  text:
+    type: string
+    nullable: true
+    readOnly: true
+  toughness:
+    type: string
+    nullable: true
+    readOnly: true
+  type:
+    type: string
+    nullable: true
+    readOnly: true
+  types:
+    type: string
+    nullable: true
+    readOnly: true
+  uuid:
+    type: string
+    readOnly: true
+required:
+  - id
+  - border_color
+  - color_identity
+  - color_indicator
+  - colors
+  - converted_mana_cost
+  - flavor_name
+  - flavor_text
+  - keywords
+  - layout
+  - mana_cost
+  - mana_value
+  - multiverseId
+  - name
+  - power
+  - rarity
+  - set_code
+  - subtypes
+  - supertypes
+  - text
+  - toughness
+  - type
+  - types
+  - uuid

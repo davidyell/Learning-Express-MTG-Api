@@ -1,0 +1,13 @@
+description: A simple generic error message
+content:
+  application/json:
+    schema:
+      type: object
+      additionalProperties: false
+      properties:
+        error:
+          type: string
+          readOnly: true
+      required:
+        - error
+      readOnly: true

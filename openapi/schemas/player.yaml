@@ -1,0 +1,21 @@
+title: Player
+description: A single player
+type: object
+additionalProperties: false
+properties:
+  id:
+    type: integer
+    readOnly: true
+  first_name:
+    type: string
+    readOnly: true
+  last_name:
+    type: string
+    readOnly: true
+  avatar:
+    type: string
+    readOnly: true
+required:
+  - id
+  - first_name
+  - last_name

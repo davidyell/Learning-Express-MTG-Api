@@ -52,6 +52,8 @@ sqlite> .quit
 
 :earth_africa: [Express](https://expressjs.com/)  
 
+:card_file_box: [Rest API Tutorial](https://restfulapi.net/)
+
 :mortar_board: I bought an excellent Typescript course on Udemy. [Understanding TypeScript - 2022 Edition](https://www.udemy.com/course/understanding-typescript/)
 
 :tv: They also have a great YouTube channel [Academind](https://www.youtube.com/academind)
@@ -81,6 +83,7 @@ sqlite> .quit
  - [ ] Work to better encapsulate request data validation so it's not all in the controller
  - [ ] Refactor Prisma to make models singular `const card: Card`, check if it changes the client api `prisma.card.findMany()`
  - [ ] Refactor edit functionality to cope with optional payload properties, like updating a deck name, but not it's cards
+ - [ ] Maybe add a sub-resource for sideboards? `/api/decks/{deckId}/sideboard`
 
  ## License
 

@@ -1,0 +1,105 @@
+description: Create or update a deck for a player with a name and a selection of cards
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        deck:
+          type: object
+          properties:
+            name:
+              type: string
+            player_id:
+              type: integer
+        cards_in_decks:
+          type: array
+          items:
+            type: object
+            properties:
+              card_id:
+                type: integer
+              quantity:
+                type: integer
+              is_sideboard:
+                type: boolean
+      x-examples:
+        example-1:
+          deck:
+            name: Postman manual test - can create deck
+            player_id: 1
+          cards_in_decks:
+            - card_id: 13422
+              quantity: 1
+              is_sideboard: false
+            - card_id: 13415
+              quantity: 1
+              is_sideboard: false
+            - card_id: 4503
+              quantity: 3
+              is_sideboard: false
+            - card_id: 34736
+              quantity: 3
+              is_sideboard: false
+            - card_id: 34733
+              quantity: 12
+              is_sideboard: false
+            - card_id: 13174
+              quantity: 4
+              is_sideboard: false
+            - card_id: 13167
+              quantity: 1
+              is_sideboard: false
+            - card_id: 13151
+              quantity: 3
+              is_sideboard: false
+            - card_id: 13308
+              quantity: 3
+              is_sideboard: false
+            - card_id: 13138
+              quantity: 1
+              is_sideboard: false
+            - card_id: 4581
+              quantity: 4
+              is_sideboard: false
+            - card_id: 4565
+              quantity: 4
+              is_sideboard: false
+            - card_id: 13164
+              quantity: 1
+              is_sideboard: false
+            - card_id: 13149
+              quantity: 2
+              is_sideboard: false
+            - card_id: 13163
+              quantity: 4
+              is_sideboard: false
+            - card_id: 40870
+              quantity: 4
+              is_sideboard: false
+            - card_id: 13168
+              quantity: 3
+              is_sideboard: false
+            - card_id: 40797
+              quantity: 2
+              is_sideboard: false
+            - card_id: 34765
+              quantity: 4
+              is_sideboard: false
+            - card_id: 34736
+              quantity: 1
+              is_sideboard: true
+            - card_id: 2844
+              quantity: 2
+              is_sideboard: true
+            - card_id: 4577
+              quantity: 2
+              is_sideboard: true
+            - card_id: 40886
+              quantity: 3
+              is_sideboard: true
+            - card_id: 4206
+              quantity: 3
+              is_sideboard: true
+            - card_id: 286
+              quantity: 4
+              is_sideboard: true

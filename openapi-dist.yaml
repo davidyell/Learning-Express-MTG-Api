@@ -1,0 +1,598 @@
+openapi: 3.0.2
+info:
+  title: MTG Deck Building App Api
+  description: Api for creating decks for Magic the Gathering
+  version: 0.0.1
+  contact:
+    name: David Yell
+    url: 'https://github.com/davidyell/Learning-Express-MTG-Api'
+    email: neon1024@gmail.com
+  license:
+    name: GNU GPL3
+    url: 'https://opensource.org/licenses/GPL-3.0'
+servers:
+  - url: 'http://localhost:3001'
+tags:
+  - name: decks
+  - name: cards
+  - name: players
+paths:
+  /api/decks:
+    get:
+      summary: List all available decks
+      description: Get a list of all the decks along with the player they belong to and a count of the cards
+      operationId: get.all.decks
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  data:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      deck:
+                        $ref: '#/components/schemas/Deck'
+                      player:
+                        $ref: '#/components/schemas/Player'
+                      meta:
+                        type: object
+                        additionalProperties: false
+                        properties:
+                          card_count:
+                            type: integer
+      parameters: []
+      tags:
+        - decks
+    post:
+      summary: Create a new deck
+      description: Create a new deck by posting the information about it
+      operationId: create.new.deck
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  data:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      deck:
+                        $ref: '#/components/schemas/Deck'
+        '400':
+          $ref: '#/components/responses/DeckValidationErrors'
+      parameters: []
+      tags:
+        - decks
+      requestBody:
+        $ref: '#/components/requestBodies/DeckPayload'
+  '/api/decks/{deckId}':
+    get:
+      summary: View a specific deck
+      description: View a specific deck by id
+      operationId: get.one.deck
+      parameters:
+        - name: deckId
+          in: path
+          required: true
+          description: The id of the deck to retrieve
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  data:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      deck:
+                        $ref: '#/components/schemas/Deck'
+                      player:
+                        $ref: '#/components/schemas/Player'
+                      cards_in_deck:
+                        $ref: '#/components/schemas/CardsInDeck'
+        '404':
+          $ref: '#/components/responses/GenericError'
+      tags:
+        - decks
+    put:
+      summary: Update an existing deck
+      description: Update a deck with new data
+      operationId: put.deck.update
+      parameters:
+        - schema:
+            type: integer
+          name: deckId
+          in: path
+          required: true
+          description: The deck id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  data:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      deck:
+                        $ref: '#/components/schemas/Deck'
+        '400':
+          $ref: '#/components/responses/DeckValidationErrors'
+      requestBody:
+        $ref: '#/components/requestBodies/DeckPayload'
+      tags:
+        - decks
+  '/api/cards/{cardId}':
+    get:
+      summary: View a single cards data
+      description: Provides a more in-depth set of data about a card
+      operationId: view.one.card
+      parameters:
+        - name: cardId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The numerical id of the card to retrieve
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Card'
+        '404':
+          $ref: '#/components/responses/GenericError'
+      tags:
+        - cards
+  /api/players:
+    get:
+      summary: Get a list of all players
+      description: Get a list of all the players and the number of decks they have created
+      parameters: []
+      operationId: get.all.players
+      tags:
+        - players
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                  - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: false
+                      required:
+                        - player
+                        - meta
+                      properties:
+                        player:
+                          $ref: '#/components/schemas/Player'
+                        meta:
+                          type: object
+                          additionalProperties: false
+                          properties:
+                            deck_count:
+                              type: integer
+                          required:
+                            - deck_count
+  '/api/players/{playerId}':
+    get:
+      summary: View a single player
+      description: Get a single player and a list of their decks
+      operationId: get.one.player
+      parameters:
+        - name: playerId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Numerical id of the player
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  data:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      player:
+                        $ref: '#/components/schemas/Player'
+                      decks:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Deck'
+        '404':
+          $ref: '#/components/responses/GenericError'
+      tags:
+        - players
+components:
+  schemas:
+    Deck:
+      title: Deck
+      description: A single deck
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        updated_ago:
+          type: string
+          readOnly: true
+      required:
+        - id
+        - name
+    Card:
+      title: Card
+      description: A single card
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          readOnly: true
+        border_color:
+          type: string
+          nullable: true
+          readOnly: true
+        color_identity:
+          type: string
+          nullable: true
+          readOnly: true
+        color_indicator:
+          type: string
+          nullable: true
+          readOnly: true
+        colors:
+          type: string
+          nullable: true
+          readOnly: true
+        converted_mana_cost:
+          type: integer
+          nullable: true
+          readOnly: true
+        flavor_name:
+          type: string
+          nullable: true
+          readOnly: true
+        flavor_text:
+          type: string
+          nullable: true
+          readOnly: true
+        keywords:
+          type: string
+          nullable: true
+          readOnly: true
+        layout:
+          type: string
+          nullable: true
+          readOnly: true
+        mana_cost:
+          type: string
+          nullable: true
+          readOnly: true
+        mana_value:
+          type: integer
+          nullable: true
+          readOnly: true
+        multiverseId:
+          type: string
+          nullable: true
+          readOnly: true
+        name:
+          type: string
+          nullable: true
+          readOnly: true
+        power:
+          type: string
+          nullable: true
+          readOnly: true
+        rarity:
+          type: string
+          nullable: true
+          readOnly: true
+        set_code:
+          type: string
+          nullable: true
+          readOnly: true
+        subtypes:
+          type: string
+          nullable: true
+          readOnly: true
+        supertypes:
+          type: string
+          nullable: true
+          readOnly: true
+        text:
+          type: string
+          nullable: true
+          readOnly: true
+        toughness:
+          type: string
+          nullable: true
+          readOnly: true
+        type:
+          type: string
+          nullable: true
+          readOnly: true
+        types:
+          type: string
+          nullable: true
+          readOnly: true
+        uuid:
+          type: string
+          readOnly: true
+      required:
+        - id
+        - border_color
+        - color_identity
+        - color_indicator
+        - colors
+        - converted_mana_cost
+        - flavor_name
+        - flavor_text
+        - keywords
+        - layout
+        - mana_cost
+        - mana_value
+        - multiverseId
+        - name
+        - power
+        - rarity
+        - set_code
+        - subtypes
+        - supertypes
+        - text
+        - toughness
+        - type
+        - types
+        - uuid
+    Player:
+      title: Player
+      description: A single player
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        first_name:
+          type: string
+          readOnly: true
+        last_name:
+          type: string
+          readOnly: true
+        avatar:
+          type: string
+          readOnly: true
+      required:
+        - id
+        - first_name
+        - last_name
+    CardsInDeck:
+      title: CardsInDeck
+      description: 'Cards in a deck with card data, quantity and sideboard status'
+      type: object
+      properties:
+        card:
+          $ref: '#/components/schemas/Card'
+        meta:
+          type: object
+          additionalProperties: false
+          properties:
+            quantity:
+              type: integer
+            is_sideboard:
+              type: boolean
+          required:
+            - quantity
+            - is_sideboard
+      required:
+        - card
+        - meta
+  responses:
+    DeckValidationErrors:
+      description: Response when a deck fails validation
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              error:
+                type: object
+                required:
+                  - hasLands
+                  - missingManaForColor
+                  - fourOrMore
+                  - sideboardSize
+                  - deckSize
+                additionalProperties: false
+                properties:
+                  hasLands:
+                    type: boolean
+                  missingManaForColor:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: false
+                      properties:
+                        color:
+                          type: string
+                  fourOrMore:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: false
+                      properties:
+                        card_id:
+                          type: integer
+                        name:
+                          type: string
+                        count:
+                          type: integer
+                          minimum: 0
+                  sideboardSize:
+                    type: boolean
+                  deckSize:
+                    type: boolean
+    GenericError:
+      description: A simple generic error message
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              error:
+                type: string
+                readOnly: true
+            required:
+              - error
+            readOnly: true
+  requestBodies:
+    DeckPayload:
+      description: Create or update a deck for a player with a name and a selection of cards
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              deck:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  player_id:
+                    type: integer
+              cards_in_decks:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    card_id:
+                      type: integer
+                    quantity:
+                      type: integer
+                    is_sideboard:
+                      type: boolean
+            x-examples:
+              example-1:
+                deck:
+                  name: Postman manual test - can create deck
+                  player_id: 1
+                cards_in_decks:
+                  - card_id: 13422
+                    quantity: 1
+                    is_sideboard: false
+                  - card_id: 13415
+                    quantity: 1
+                    is_sideboard: false
+                  - card_id: 4503
+                    quantity: 3
+                    is_sideboard: false
+                  - card_id: 34736
+                    quantity: 3
+                    is_sideboard: false
+                  - card_id: 34733
+                    quantity: 12
+                    is_sideboard: false
+                  - card_id: 13174
+                    quantity: 4
+                    is_sideboard: false
+                  - card_id: 13167
+                    quantity: 1
+                    is_sideboard: false
+                  - card_id: 13151
+                    quantity: 3
+                    is_sideboard: false
+                  - card_id: 13308
+                    quantity: 3
+                    is_sideboard: false
+                  - card_id: 13138
+                    quantity: 1
+                    is_sideboard: false
+                  - card_id: 4581
+                    quantity: 4
+                    is_sideboard: false
+                  - card_id: 4565
+                    quantity: 4
+                    is_sideboard: false
+                  - card_id: 13164
+                    quantity: 1
+                    is_sideboard: false
+                  - card_id: 13149
+                    quantity: 2
+                    is_sideboard: false
+                  - card_id: 13163
+                    quantity: 4
+                    is_sideboard: false
+                  - card_id: 40870
+                    quantity: 4
+                    is_sideboard: false
+                  - card_id: 13168
+                    quantity: 3
+                    is_sideboard: false
+                  - card_id: 40797
+                    quantity: 2
+                    is_sideboard: false
+                  - card_id: 34765
+                    quantity: 4
+                    is_sideboard: false
+                  - card_id: 34736
+                    quantity: 1
+                    is_sideboard: true
+                  - card_id: 2844
+                    quantity: 2
+                    is_sideboard: true
+                  - card_id: 4577
+                    quantity: 2
+                    is_sideboard: true
+                  - card_id: 40886
+                    quantity: 3
+                    is_sideboard: true
+                  - card_id: 4206
+                    quantity: 3
+                    is_sideboard: true
+                  - card_id: 286
+                    quantity: 4
+                    is_sideboard: true

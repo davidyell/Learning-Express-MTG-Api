@@ -1,0 +1,67 @@
+get:
+  summary: View a specific deck
+  description: View a specific deck by id
+  operationId: get.one.deck
+  parameters:
+    - name: deckId
+      in: path
+      required: true
+      description: The id of the deck to retrieve
+      schema:
+        type: integer
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              data:
+                type: object
+                additionalProperties: false
+                properties:
+                  deck:
+                    $ref: '../../schemas/deck.yaml'
+                  player:
+                    $ref: '../../schemas/player.yaml'
+                  cards_in_deck:
+                    $ref: '../../schemas/cards-in-deck.yaml'
+    '404':
+      $ref: '../../responses/generic-error.yaml'
+  tags:
+    - decks
+
+put:
+  summary: Update an existing deck
+  description: Update a deck with new data
+  operationId: put.deck.update
+  parameters:
+    - schema:
+        type: integer
+      name: deckId
+      in: path
+      required: true
+      description: The deck id
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              data:
+                type: object
+                additionalProperties: false
+                properties:
+                  deck:
+                    $ref: '../../schemas/deck.yaml'
+    '400':
+      $ref: '../../responses/deck-validation-errors.yaml'
+  requestBody:
+    $ref: '../../request-bodies/deck-payload.yaml'
+  tags:
+    - decks

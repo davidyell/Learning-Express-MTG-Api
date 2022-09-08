@@ -1,0 +1,37 @@
+get:
+  summary: Get a list of all players
+  description: Get a list of all the players and the number of decks they have created
+  parameters: []
+  operationId: get.all.players
+  tags:
+    - players
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            required:
+              - data
+            properties:
+              data:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: false
+                  required:
+                    - player
+                    - meta
+                  properties:
+                    player:
+                      $ref: '../../schemas/player.yaml'
+                    meta:
+                      type: object
+                      additionalProperties: false
+                      properties:
+                        deck_count:
+                          type: integer
+                      required:
+                        - deck_count

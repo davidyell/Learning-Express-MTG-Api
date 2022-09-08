@@ -1,0 +1,5 @@
+DeckValidationErrors:
+  $ref: './deck-validation-errors.yaml'
+
+GenericError:
+  $ref: './generic-error.yaml'
