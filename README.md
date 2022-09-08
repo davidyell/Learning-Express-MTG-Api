@@ -79,6 +79,8 @@ sqlite> .quit
  - [x] Complete open api spec response body definitions
  - [x] Refactor shared open api spec responses into schemas
  - [ ] Work to better encapsulate request data validation so it's not all in the controller
+ - [ ] Refactor Prisma to make models singular `const card: Card`, check if it changes the client api `prisma.card.findMany()`
+ - [ ] Refactor edit functionality to cope with optional payload properties, like updating a deck name, but not it's cards
 
  ## License
 
