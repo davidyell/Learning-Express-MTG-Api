@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import cardEncoder from '../encoders/card.encoder';
 import prismaClient from '../../prisma/client';
 
 const view = async (request: Request, response: Response) => {
@@ -7,7 +8,11 @@ const view = async (request: Request, response: Response) => {
       where: { id: parseInt(request.params.id, 10) },
     });
 
-    return response.json(result);
+    const responseData = {
+      data: cardEncoder(result),
+    };
+
+    return response.json(responseData);
   } catch (error) {
     return response.status(404).json({ error: 'Card not found' });
   }

@@ -19,14 +19,16 @@ const index = async (request: Request, response: Response) => {
     },
   });
 
-  const responseData = results.map((result) => ({
-    deck: deckEncoder(result),
-    player: playerEncoder(result.player),
-    meta: {
-      // eslint-disable-next-line no-underscore-dangle
-      card_count: result._count.cards_in_decks,
-    },
-  }));
+  const responseData = {
+    data: results.map((result) => ({
+      deck: deckEncoder(result),
+      player: playerEncoder(result.player),
+      meta: {
+        // eslint-disable-next-line no-underscore-dangle
+        card_count: result._count.cards_in_decks,
+      },
+    })),
+  };
 
   return response.json(responseData);
 };
@@ -46,9 +48,11 @@ const view = async (request: Request, response: Response) => {
     });
 
     const responseData = {
-      deck: deckEncoder(result),
-      player: playerEncoder(result.player),
-      cards_in_deck: result.cards_in_decks.map((cardInDeck) => cardInDeckEncoder(cardInDeck)),
+      data: {
+        deck: deckEncoder(result),
+        player: playerEncoder(result.player),
+        cards_in_deck: result.cards_in_decks.map((cardInDeck) => cardInDeckEncoder(cardInDeck)),
+      },
     };
 
     return response.json(responseData);
@@ -92,7 +96,9 @@ const create = async (request: Request, response: Response) => {
   });
 
   const responseData = {
-    deck: deckEncoder(newDeck),
+    data: {
+      deck: deckEncoder(newDeck),
+    },
   };
 
   return response.json(responseData);
@@ -135,7 +141,9 @@ const edit = async (request: Request, response: Response) => {
   });
 
   const responseData = {
-    deck: deckEncoder(updatedDeck),
+    data: {
+      deck: deckEncoder(updatedDeck),
+    },
   };
 
   return response.json(responseData);
