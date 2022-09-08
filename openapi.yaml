@@ -5,13 +5,13 @@ info:
   version: 0.0.1
   contact:
     name: David Yell
-    url: "https://github.com/davidyell/Learning-Express-MTG-Api"
+    url: 'https://github.com/davidyell/Learning-Express-MTG-Api'
     email: neon1024@gmail.com
   license:
     name: GNU GPL3
-    url: "https://opensource.org/licenses/GPL-3.0"
+    url: 'https://opensource.org/licenses/GPL-3.0'
 servers:
-  - url: "http://localhost:3001"
+  - url: 'http://localhost:3001'
 tags:
   - name: decks
   - name: cards
@@ -21,7 +21,7 @@ paths:
     get:
       summary: List all available decks
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
@@ -86,22 +86,21 @@ paths:
       summary: Create a new deck
       operationId: create.new.deck
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Deck"
-        "400":
-          decription: Bad request
-          $ref: "#/components/responses/Deck-validation-errors"
+                $ref: '#/components/schemas/Deck'
+        '400':
+          $ref: '#/components/responses/Deck-validation-errors'
       description: Create a new deck by posting the information about it
       parameters: []
       tags:
         - decks
       requestBody:
-        $ref: "#/components/requestBodies/Deck"
-  "/api/decks/{deckId}":
+        $ref: '#/components/requestBodies/Deck'
+  '/api/decks/{deckId}':
     get:
       summary: View a specific deck
       parameters:
@@ -112,7 +111,7 @@ paths:
           schema:
             type: number
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
@@ -131,15 +130,19 @@ paths:
                     readOnly: true
                   created:
                     type: string
+                    format: date-time
+                    readOnly: true
                   updated:
                     type: string
+                    format: date-time
+                    readOnly: true
                   player:
                     type: object
+                    additionalProperties: false
                     required:
                       - id
                       - first_name
                       - last_name
-                    additionalProperties: false
                     properties:
                       id:
                         type: integer
@@ -164,19 +167,27 @@ paths:
                     type: array
                     items:
                       type: object
+                      additionalProperties: false
                       properties:
                         id:
                           type: integer
+                          readOnly: true
                         deck_id:
                           type: integer
+                          readOnly: true
                         card_id:
                           type: integer
+                          readOnly: true
                         quantity:
                           type: integer
+                          minimum: 1
+                          readOnly: true
                         is_sideboard:
                           type: boolean
+                          readOnly: true
                         cards:
                           type: object
+                          additionalProperties: false
                           properties:
                             id:
                               type: integer
@@ -208,6 +219,15 @@ paths:
                               nullable: true
                             text:
                               type: string
+                          readOnly: true
+                      required:
+                        - id
+                        - deck_id
+                        - card_id
+                        - quantity
+                        - is_sideboard
+                      readOnly: true
+                    readOnly: true
                 required:
                   - id
                   - name
@@ -215,16 +235,8 @@ paths:
                   - player
                 readOnly: true
               examples: {}
-        "404":
-          description: Deck not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    readOnly: true
+        '404':
+          $ref: '#/components/responses/Generic-error'
       tags:
         - decks
       description: View a specific deck by id
@@ -233,18 +245,17 @@ paths:
       summary: Update an existing deck
       operationId: deck.put
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Deck"
-        "400":
-          decription: Bad request
-          $ref: "#/components/responses/Deck-validation-errors"
+                $ref: '#/components/schemas/Deck'
+        '400':
+          $ref: '#/components/responses/Deck-validation-errors'
       description: Update a deck with new data
       requestBody:
-        $ref: "#/components/requestBodies/Deck"
+        $ref: '#/components/requestBodies/Deck'
       tags:
         - decks
     parameters:
@@ -254,7 +265,7 @@ paths:
         in: path
         required: true
         description: The deck id
-  "/api/cards/{cardId}":
+  '/api/cards/{cardId}':
     get:
       summary: View a certain cards details
       description: Provides a more in-depth set of data about a card
@@ -267,16 +278,264 @@ paths:
           description: The numerical id of the card to retrieve
       operationId: view.one.card
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
-              schema: {}
-        "404":
-          description: Card not found
-          content:
-            application/json:
-              schema: {}
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  artist:
+                    type: string
+                    nullable: true
+                  asciiName:
+                    type: string
+                    nullable: true
+                  availability:
+                    type: string
+                    nullable: true
+                  boosterTypes:
+                    type: string
+                    nullable: true
+                  borderColor:
+                    type: string
+                    nullable: true
+                  cardKingdomEtchedId:
+                    type: string
+                    nullable: true
+                  cardKingdomFoilId:
+                    type: string
+                    nullable: true
+                  cardKingdomId:
+                    type: string
+                    nullable: true
+                  cardParts:
+                    type: string
+                    nullable: true
+                  cardsphereId:
+                    type: string
+                    nullable: true
+                  colorIdentity:
+                    type: string
+                    nullable: true
+                  colorIndicator:
+                    type: string
+                    nullable: true
+                  colors:
+                    type: string
+                    nullable: true
+                  convertedManaCost:
+                    type: integer
+                    nullable: true
+                  duelDeck:
+                    type: string
+                    nullable: true
+                  edhrecRank:
+                    type: integer
+                    nullable: true
+                  faceConvertedManaCost:
+                    type: integer
+                    nullable: true
+                  faceFlavorName:
+                    type: string
+                    nullable: true
+                  faceManaValue:
+                    type: integer
+                    nullable: true
+                  faceName:
+                    type: string
+                    nullable: true
+                  finishes:
+                    type: string
+                    nullable: true
+                  flavorName:
+                    type: string
+                    nullable: true
+                  flavorText:
+                    type: string
+                    nullable: true
+                  frameEffects:
+                    type: string
+                    nullable: true
+                  frameVersion:
+                    type: string
+                    nullable: true
+                  hand:
+                    type: string
+                    nullable: true
+                  hasAlternativeDeckLimit:
+                    type: integer
+                  hasContentWarning:
+                    type: integer
+                  hasFoil:
+                    type: integer
+                  hasNonFoil:
+                    type: integer
+                  isAlternative:
+                    type: integer
+                  isFullArt:
+                    type: integer
+                  isFunny:
+                    type: integer
+                  isOnlineOnly:
+                    type: integer
+                  isOversized:
+                    type: integer
+                  isPromo:
+                    type: integer
+                  isRebalanced:
+                    type: integer
+                  isReprint:
+                    type: integer
+                  isReserved:
+                    type: integer
+                  isStarter:
+                    type: integer
+                  isStorySpotlight:
+                    type: integer
+                  isTextless:
+                    type: integer
+                  isTimeshifted:
+                    type: integer
+                  keywords:
+                    type: string
+                    nullable: true
+                  language:
+                    type: string
+                    nullable: true
+                  layout:
+                    type: string
+                    nullable: true
+                  leadershipSkills:
+                    type: string
+                    nullable: true
+                  life:
+                    type: string
+                    nullable: true
+                  loyalty:
+                    type: string
+                    nullable: true
+                  manaCost:
+                    type: string
+                    nullable: true
+                  manaValue:
+                    type: integer
+                    nullable: true
+                  mcmId:
+                    type: string
+                    nullable: true
+                  mcmMetaId:
+                    type: string
+                    nullable: true
+                  mtgArenaId:
+                    type: string
+                    nullable: true
+                  mtgjsonV4Id:
+                    type: string
+                    nullable: true
+                  mtgoFoilId:
+                    type: string
+                    nullable: true
+                  mtgoId:
+                    type: string
+                    nullable: true
+                  multiverseId:
+                    type: string
+                    nullable: true
+                  name:
+                    type: string
+                    nullable: true
+                  number:
+                    type: string
+                    nullable: true
+                  originalPrintings:
+                    type: string
+                    nullable: true
+                  originalReleaseDate:
+                    type: string
+                    nullable: true
+                  otherFaceIds:
+                    type: string
+                    nullable: true
+                  power:
+                    type: string
+                    nullable: true
+                  printings:
+                    type: string
+                    nullable: true
+                  promoTypes:
+                    type: string
+                    nullable: true
+                  purchaseUrls:
+                    type: string
+                    nullable: true
+                  rarity:
+                    type: string
+                    nullable: true
+                  rebalancedPrintings:
+                    type: string
+                    nullable: true
+                  scryfallId:
+                    type: string
+                    nullable: true
+                  scryfallIllustrationId:
+                    type: string
+                    nullable: true
+                  scryfallOracleId:
+                    type: string
+                    nullable: true
+                  securityStamp:
+                    type: string
+                    nullable: true
+                  setCode:
+                    type: string
+                    nullable: true
+                  side:
+                    type: string
+                    nullable: true
+                  signature:
+                    type: string
+                    nullable: true
+                  subtypes:
+                    type: string
+                    nullable: true
+                  supertypes:
+                    type: string
+                    nullable: true
+                  tcgplayerEtchedProductId:
+                    type: string
+                    nullable: true
+                  tcgplayerProductId:
+                    type: string
+                    nullable: true
+                  text:
+                    type: string
+                    nullable: true
+                  toughness:
+                    type: string
+                    nullable: true
+                  type:
+                    type: string
+                    nullable: true
+                  types:
+                    type: string
+                    nullable: true
+                  uuid:
+                    type: string
+                    nullable: false
+                  variations:
+                    type: string
+                    nullable: true
+                  watermark:
+                    type: string
+                    nullable: true
+                required:
+                  - id
+                  - uuid
+        '404':
+          $ref: '#/components/responses/Generic-error'
       tags:
         - cards
   /api/players:
@@ -286,16 +545,17 @@ paths:
       parameters: []
       operationId: players.get
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
-              schema: {}
-        "404":
-          description: Not Found
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlayerWithDeckCount'
       tags:
         - players
-  "/api/players/{playerId}":
+  '/api/players/{playerId}':
     get:
       summary: View a single player
       description: Get a single player and a list of their decks
@@ -308,26 +568,58 @@ paths:
           description: Numerical id of the player
       operationId: get.player
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
-              schema: {}
-        "404":
-          description: Player not found
-          content:
-            application/json:
-              schema: {}
+              schema:
+                type: object
+                x-examples:
+                  example-1:
+                    id: 1
+                    first_name: Andrew
+                    last_name: Okuneva
+                    email: Andrew_Okuneva@example.net
+                    created: '2022-09-05T13:46:24.685Z'
+                    avatar: avatar-f17381cf1b22668716da44a073246079.jpg
+                    decks:
+                      - id: 7
+                        name: Slowly Bell
+                        player_id: 1
+                        created: '2022-09-05T13:46:24.896Z'
+                        updated: '2022-09-05T13:46:24.897Z'
+                additionalProperties: false
+                properties:
+                  id:
+                    type: integer
+                  first_name:
+                    type: string
+                  last_name:
+                    type: string
+                  email:
+                    type: string
+                  created:
+                    type: string
+                  avatar:
+                    type: string
+                  decks:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Deck'
+                required:
+                  - id
+                  - first_name
+                  - last_name
+                  - email
+                readOnly: true
+        '404':
+          $ref: '#/components/responses/Generic-error'
       tags:
         - players
-
 security: []
-
 components:
   links: {}
-
   callbacks: {}
-
   schemas:
     Deck:
       type: object
@@ -355,10 +647,60 @@ components:
         - player_id
         - created
         - updated
-
+      title: Deck
+      description: A single deck
+    PlayerWithDeckCount:
+      type: object
+      x-examples:
+        example-1:
+          id: 1
+          first_name: Andrew
+          last_name: Okuneva
+          email: Andrew_Okuneva@example.net
+          created: '2022-09-05T13:46:24.685Z'
+          avatar: avatar-f17381cf1b22668716da44a073246079.jpg
+          _count:
+            decks: 12
+      description: A single players data and their decks
+      title: Player with deck count
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        first_name:
+          type: string
+          readOnly: true
+        last_name:
+          type: string
+          readOnly: true
+        email:
+          type: string
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        avatar:
+          type: string
+          readOnly: true
+        _count:
+          type: object
+          properties:
+            decks:
+              type: integer
+              minimum: 0
+      required:
+        - id
+        - first_name
+        - last_name
+        - email
+        - created
+        - _count
+      readOnly: true
   requestBodies:
     Deck:
-      description: Create a brand new deck for a player with a name and a selection of cards
+      description: Create or update a deck for a player with a name and a selection of cards
       content:
         application/json:
           schema:
@@ -463,7 +805,6 @@ components:
                   - card_id: 286
                     quantity: 4
                     is_sideboard: true
-
   responses:
     Deck-validation-errors:
       description: Response when a deck fails validation
@@ -479,7 +820,7 @@ components:
                     - color: Red
                   fourOrMore:
                     - card_id: 13422
-                      name: "Shinka, the Bloodsoaked Keep"
+                      name: 'Shinka, the Bloodsoaked Keep'
                       count: 9
                   sideboardSize: true
                   deckSize: true
@@ -533,6 +874,20 @@ components:
                   deckSize:
                     type: boolean
                     readOnly: true
+                readOnly: true
+            required:
+              - error
+            readOnly: true
+    Generic-error:
+      description: A simple generic error message
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              error:
+                type: string
                 readOnly: true
             required:
               - error
