@@ -1,0 +1,58 @@
+name: Open API Validation
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - '**.yaml'
+
+  workflow_dispatch:
+
+jobs:
+  swagger-validate:
+    name: Run @apidevtools/swagger-cli
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3.4.1
+        with:
+          node-version: 16
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install
+      
+      - name: Build
+        run: yarn run openapi:build
+
+      - name: Validate
+        run: yarn run openapi:validate
+
+  stoplight-spectral:
+    name: Run stoplightio/spectral
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3.4.1
+        with:
+          node-version: 16
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install
+      
+      - name: Build
+        run: yarn run openapi:build
+
+      - name: Validate
+        uses: stoplightio/spectral-action@v0.8.8
+        with:
+          file_glob: 'openapi-dist.yaml'
