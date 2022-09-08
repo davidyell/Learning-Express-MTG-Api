@@ -45,7 +45,7 @@ jobs:
         run: yarn run lint:ci
 
       - name: Run test suite
-        run: yarn test
+        run: yarn test:ci
 
   lint:
     runs-on: ubuntu-latest
