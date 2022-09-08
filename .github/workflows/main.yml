@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  lint-and-test:
+  tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -46,6 +46,24 @@ jobs:
 
       - name: Run test suite
         run: yarn test
+
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3.4.1
+        with:
+          node-version: 16
+          cache: yarn
+          
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Run eslint
+        run: yarn run lint:ci
 
   openapi-validation:
     runs-on: ubuntu-latest
