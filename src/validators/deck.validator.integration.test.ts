@@ -1,5 +1,5 @@
 import DeckValidator from './deck.validator';
-import CreateDeck from '../tests/fixtures/create.deck';
+import exampleDeck from '../tests/fixtures/example.deck.payload';
 import prismaClient from '../../prisma/client';
 
 describe('Validating a decks cards', () => {
@@ -8,9 +8,9 @@ describe('Validating a decks cards', () => {
   });
 
   it('should be valid when lands are in the deck', async () => {
-    const cardIds = CreateDeck.cards_in_decks.map((card) => card.card_id);
+    const cardIds = exampleDeck.cards_in_decks.map((card) => card.card_id);
     const cardData = await prismaClient.cards.findMany({ where: { id: { in: cardIds } } });
-    const validator = new DeckValidator(CreateDeck.cards_in_decks, cardData);
+    const validator = new DeckValidator(exampleDeck.cards_in_decks, cardData);
 
     expect(validator.hasLands()).toBeTruthy;
   });
@@ -21,10 +21,10 @@ describe('Validating a decks cards', () => {
       34736 // Mountain
     ];
     
-    const cardsInDeckWithNoLands = CreateDeck.cards_in_decks.filter(
+    const cardsInDeckWithNoLands = exampleDeck.cards_in_decks.filter(
       (cardsInDeck) => cardsInDeck.card_id !== landsToRemove[0] && cardsInDeck.card_id !== landsToRemove[1]
     );
-    const newDeck = {...CreateDeck};
+    const newDeck = {...exampleDeck};
     newDeck.cards_in_decks = cardsInDeckWithNoLands;
 
     const cardIds = newDeck.cards_in_decks.map((card) => card.card_id);
@@ -35,9 +35,9 @@ describe('Validating a decks cards', () => {
   });
 
   it('should ensure mana generation matches deck cards', async () => {
-    const cardIds = CreateDeck.cards_in_decks.map((card) => card.card_id);
+    const cardIds = exampleDeck.cards_in_decks.map((card) => card.card_id);
     const cardData = await prismaClient.cards.findMany({ where: { id: { in: cardIds } } });
-    const validator = new DeckValidator(CreateDeck.cards_in_decks, cardData);
+    const validator = new DeckValidator(exampleDeck.cards_in_decks, cardData);
 
     expect(validator.missingManaForColor()).toHaveLength(0);
   });
@@ -48,7 +48,7 @@ describe('Validating a decks cards', () => {
       13422, // Shinka, the Bloodsoaked Keep
     ];
     
-    const newDeck = {...CreateDeck};
+    const newDeck = {...exampleDeck};
     newDeck.cards_in_decks = newDeck.cards_in_decks.filter(
       (cardsInDeck) => cardsInDeck.card_id !== landsToRemove[0] && cardsInDeck.card_id !== landsToRemove[1]
     );
@@ -65,7 +65,7 @@ describe('Validating a decks cards', () => {
   });
 
   it('should invalidate decks with more than 4 of a basic card', async () => {
-    const newDeck = {...CreateDeck};
+    const newDeck = {...exampleDeck};
     newDeck.cards_in_decks[5].quantity = 9;
 
     const cardIds = newDeck.cards_in_decks.map((card) => card.card_id);
@@ -84,7 +84,7 @@ describe('Validating a decks cards', () => {
   });
 
   it('should invalidate a deck with a sideboard more than 15 cards', async () => {
-    const newDeck = {...CreateDeck};
+    const newDeck = {...exampleDeck};
     newDeck.cards_in_decks.push({
       card_id: 260,
       quantity: 4,
@@ -99,7 +99,7 @@ describe('Validating a decks cards', () => {
   });
 
   it('should invalidate a deck with fewer than 60 cards', async () => {
-    const newDeck = {...CreateDeck};
+    const newDeck = {...exampleDeck};
     newDeck.cards_in_decks = newDeck.cards_in_decks.slice(0, 8);
 
     const cardIds = newDeck.cards_in_decks.map((card) => card.card_id);
@@ -131,7 +131,7 @@ describe('Validating a decks cards', () => {
       }
     ]
 
-    const newDeck = {...CreateDeck};
+    const newDeck = {...exampleDeck};
     const newCards = multiColorCards.map((card) => {
       return { card_id: card.id, quantity: 1, is_sideboard: false };
     })
