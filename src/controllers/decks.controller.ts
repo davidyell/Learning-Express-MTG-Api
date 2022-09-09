@@ -160,12 +160,7 @@ const remove = async (request: Request, response: Response) => {
     return response.status(404).json({ error: 'Deck not found' });
   }
 
-  // TODO: 'Write an integration test which deletes the created deck?',
-  // TODO: 'Add a new open api schema definition for the endpoint',
-
-  return response.json({
-    data: {},
-  });
+  return response.status(204);
 };
 
 export {

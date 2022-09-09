@@ -61,7 +61,7 @@ delete:
   description: Delete a single deck and remove the cards in the deck
   operationId: delete.one.deck
   responses:
-    '200':
-      # TODO: Write this schema
+    '204':
+      description: 'OK'
     '404':
       $ref: '../../responses/generic-error.yaml'
