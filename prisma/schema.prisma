@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Cards {
+model Card {
   id                       Int            @id @default(autoincrement())
   artist                   String?
   asciiName                String?
@@ -96,45 +96,45 @@ model Cards {
   uuid                     String         @unique(map: "sqlite_autoindex_cards_1")
   variations               String?
   watermark                String?
-  cards_in_decks           CardsInDecks[]
-  legalities               Legalities[]
-  rulings                  Rulings[]
+  cards_in_decks           CardsInDeck[]
+  legalities               Legality[]
+  rulings                  Ruling[]
 
   @@map("cards")
 }
 
-model CardsInDecks {
+model CardsInDeck {
   id           Int     @id @default(autoincrement())
   deck_id      Int
   card_id      Int
   quantity     Int     @default(1)
   is_sideboard Boolean @default(false)
-  decks        Decks   @relation(fields: [deck_id], references: [id], onDelete: Cascade)
-  cards        Cards   @relation(fields: [card_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  decks        Deck   @relation(fields: [deck_id], references: [id], onDelete: Cascade)
+  cards        Card   @relation(fields: [card_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([deck_id, card_id], map: "cards_in_decks_deck_id_IDX")
   @@map("cards_in_decks")
 }
 
-model Decks {
+model Deck {
   id             Int            @id @default(autoincrement())
   name           String
   player_id      Int
   created        DateTime       @default(now())
   updated        DateTime?      @updatedAt
-  player         Players        @relation(fields: [player_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  cards_in_decks CardsInDecks[]
+  player         Player        @relation(fields: [player_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  cards_in_decks CardsInDeck[]
 
   @@index([player_id], map: "decks_player_id_IDX")
   @@map("decks")
 }
 
-model Legalities {
+model Legality {
   id     Int     @id @default(autoincrement())
   format String?
   status String?
   uuid   String?
-  cards  Cards?  @relation(fields: [uuid], references: [uuid], onDelete: Cascade)
+  cards  Card?  @relation(fields: [uuid], references: [uuid], onDelete: Cascade)
 
   @@map("legalities")
 }
@@ -147,29 +147,29 @@ model Meta {
   @@map("meta")
 }
 
-model Players {
+model Player {
   id         Int       @id @default(autoincrement())
   first_name String
   last_name  String
   email      String
   created    DateTime? @default(now())
   avatar     String?
-  decks      Decks[]
+  decks      Deck[]
 
   @@map("players")
 }
 
-model Rulings {
+model Ruling {
   id    Int       @id @default(autoincrement())
   date  DateTime?
   text  String?
   uuid  String?
-  cards Cards?    @relation(fields: [uuid], references: [uuid], onDelete: Cascade)
+  cards Card?    @relation(fields: [uuid], references: [uuid], onDelete: Cascade)
 
   @@map("rulings")
 }
 
-model Sets {
+model Set {
   id               Int               @id @default(autoincrement())
   baseSetSize      Int?
   block            String?
@@ -197,7 +197,7 @@ model Sets {
   @@map("sets")
 }
 
-model Tokens {
+model Token {
   id                     Int     @id @default(autoincrement())
   artist                 String?
   asciiName              String?
