@@ -1,4 +1,4 @@
-import { Cards, CardsInDecks } from '@prisma/client';
+import { Card, CardsInDeck } from '@prisma/client';
 import {
   isEqual, isNil, uniq, uniqWith,
 } from 'lodash';
@@ -7,7 +7,7 @@ import type { DeckValidationErrors, MissingManaError, MoreThanFourError } from '
 import { CardColor } from '../types/deck.types';
 
 // Define a new type for a deck which allows for both saved and unsaved decks
-type PartialCardsInDecks = Omit<CardsInDecks, 'id' | 'deck_id'> | CardsInDecks;
+type PartialCardsInDecks = Omit<CardsInDeck, 'id' | 'deck_id'> | CardsInDeck;
 
 /**
  * Validate a built deck based on the rules for Constructed
@@ -17,9 +17,9 @@ type PartialCardsInDecks = Omit<CardsInDecks, 'id' | 'deck_id'> | CardsInDecks;
 export default class DeckValidator {
   private cards_in_decks: Readonly<PartialCardsInDecks>[];
 
-  private cards: Readonly<Cards>[];
+  private cards: Readonly<Card>[];
 
-  constructor(cardsInDecks: PartialCardsInDecks[], cardData: Cards[]) {
+  constructor(cardsInDecks: PartialCardsInDecks[], cardData: Card[]) {
     this.cards_in_decks = cardsInDecks;
     this.cards = cardData;
   }
@@ -38,7 +38,7 @@ export default class DeckValidator {
    * Decks should really contain some lands to generate mana
    */
   hasLands(color?: CardColor): boolean {
-    const foundLand = this.cards.find((card: Cards) => {
+    const foundLand = this.cards.find((card: Card) => {
       if (!isNil(color) && !isNil(card.types) && !isNil(card.colorIdentity)) {
         return card.types.includes('Land') && card.colorIdentity.includes(color);
       }
@@ -96,7 +96,7 @@ export default class DeckValidator {
     const moreThanFour = this.cards_in_decks.filter((cardsInDeck: PartialCardsInDecks) => cardsInDeck.quantity > 4);
 
     moreThanFour.forEach((cardInDeck) => {
-      const cardData = this.cards.find((card: Cards) => card.id === cardInDeck.card_id);
+      const cardData = this.cards.find((card: Card) => card.id === cardInDeck.card_id);
 
       if (cardData !== undefined) {
         if (!isNil(cardData.supertypes) && cardData.supertypes.includes('Basic')) {

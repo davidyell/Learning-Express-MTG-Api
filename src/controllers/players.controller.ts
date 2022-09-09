@@ -4,7 +4,7 @@ import prismaClient from '../../prisma/client';
 import deckEncoder from '../encoders/deck.encoder';
 
 const index = async (request: Request, response: Response) => {
-  const results = await prismaClient.players.findMany({
+  const results = await prismaClient.player.findMany({
     include: {
       _count: {
         select: {
@@ -29,7 +29,7 @@ const index = async (request: Request, response: Response) => {
 
 const view = async (request: Request, response: Response) => {
   try {
-    const result = await prismaClient.players.findUniqueOrThrow({
+    const result = await prismaClient.player.findUniqueOrThrow({
       where: { id: parseInt(request.params.id, 10) },
       include: {
         decks: true,

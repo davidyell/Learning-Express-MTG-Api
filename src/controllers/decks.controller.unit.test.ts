@@ -33,7 +33,7 @@ describe('Decks controller unit tests', () => {
       },
     ];
 
-    prismaMock.decks.findMany.mockResolvedValue(queryResult)
+    prismaMock.deck.findMany.mockResolvedValue(queryResult)
 
     const result = await index(request, response);
     const expected = {
@@ -58,6 +58,6 @@ describe('Decks controller unit tests', () => {
     };
 
     expect(result).toEqual(expected);
-    expect(prismaMock.decks.findMany).toBeCalledTimes(1)
+    expect(prismaMock.deck.findMany).toBeCalledTimes(1)
   });
 });

@@ -1,7 +1,7 @@
-import { Cards, CardsInDecks } from '@prisma/client';
+import { Card, CardsInDeck } from '@prisma/client';
 import cardEncoder from './card.encoder';
 
-type CardsInDecksWithCards = CardsInDecks & { cards: Cards };
+type CardsInDecksWithCards = CardsInDeck & { cards: Card };
 
 const cardInDeckEncoder = (cardInDeck: CardsInDecksWithCards) => ({
   card: cardEncoder(cardInDeck.cards),

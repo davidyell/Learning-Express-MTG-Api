@@ -1,4 +1,4 @@
-import type { Decks } from '@prisma/client';
+import type { Deck } from '@prisma/client';
 import { Request, Response } from 'express';
 import deckEncoder from '../encoders/deck.encoder';
 import playerEncoder from '../encoders/player.encoder';
@@ -8,7 +8,7 @@ import type { PostDeck } from '../types/deck.types';
 import DeckValidator from '../validators/deck.validator';
 
 const index = async (request: Request, response: Response) => {
-  const results = await prismaClient.decks.findMany({
+  const results = await prismaClient.deck.findMany({
     include: {
       player: true,
       _count: {
@@ -35,7 +35,7 @@ const index = async (request: Request, response: Response) => {
 
 const view = async (request: Request, response: Response) => {
   try {
-    const result = await prismaClient.decks.findUniqueOrThrow({
+    const result = await prismaClient.deck.findUniqueOrThrow({
       where: { id: parseInt(request.params.id, 10) },
       include: {
         player: true,
@@ -66,7 +66,7 @@ const create = async (request: Request, response: Response) => {
 
   // Validate the deck
   const cardIds = postData.cards_in_decks.map((card) => card.card_id);
-  const cardData = await prismaClient.cards.findMany({ where: { id: { in: cardIds } } });
+  const cardData = await prismaClient.card.findMany({ where: { id: { in: cardIds } } });
   const validator = new DeckValidator(postData.cards_in_decks, cardData);
   const isValid = validator.isValid();
 
@@ -85,7 +85,7 @@ const create = async (request: Request, response: Response) => {
   }
 
   // Save the new deck
-  const newDeck = await prismaClient.decks.create({
+  const newDeck = await prismaClient.deck.create({
     data: {
       name: postData.deck.name,
       player_id: postData.deck.player_id,
@@ -106,11 +106,11 @@ const create = async (request: Request, response: Response) => {
 
 const edit = async (request: Request, response: Response) => {
   const postData: PostDeck = request.body;
-  const deckId: Decks['id'] = parseInt(request.params.id, 10);
+  const deckId: Deck['id'] = parseInt(request.params.id, 10);
 
   // Validate the deck
   const cardIds = postData.cards_in_decks.map((card) => card.card_id);
-  const cardData = await prismaClient.cards.findMany({ where: { id: { in: cardIds } } });
+  const cardData = await prismaClient.card.findMany({ where: { id: { in: cardIds } } });
   const validator = new DeckValidator(postData.cards_in_decks, cardData);
   const isValid = validator.isValid();
 
@@ -129,7 +129,7 @@ const edit = async (request: Request, response: Response) => {
   }
 
   // Update the deck
-  const updatedDeck = await prismaClient.decks.update({
+  const updatedDeck = await prismaClient.deck.update({
     where: { id: deckId },
     data: {
       name: postData.deck.name,
@@ -150,10 +150,10 @@ const edit = async (request: Request, response: Response) => {
 };
 
 const remove = async (request: Request, response: Response) => {
-  const deckId: Decks['id'] = parseInt(request.params.id, 10);
+  const deckId: Deck['id'] = parseInt(request.params.id, 10);
 
   try {
-    await prismaClient.decks.delete({
+    await prismaClient.deck.delete({
       where: { id: deckId },
     });
   } catch (error) {
