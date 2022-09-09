@@ -65,3 +65,5 @@ delete:
       description: 'OK'
     '404':
       $ref: '../../responses/generic-error.yaml'
+  tags:
+    - decks
