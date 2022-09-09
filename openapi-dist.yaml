@@ -83,6 +83,8 @@ paths:
           description: OK
         '404':
           $ref: '#/components/responses/GenericError'
+      tags:
+        - decks
   '/api/decks/{deckId}':
     get:
       summary: View a specific deck
