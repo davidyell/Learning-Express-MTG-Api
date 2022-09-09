@@ -150,15 +150,21 @@ const edit = async (request: Request, response: Response) => {
 };
 
 const remove = async (request: Request, response: Response) => {
-  response.json({
-    data: {
-      // TODO: Do the things!
-      todo: [
-        'Implement the delete method',
-        'Write an integration test which deletes the created deck?',
-        'Add a new open api schema definition for the endpoint',
-      ],
-    },
+  const deckId: Decks['id'] = parseInt(request.params.id, 10);
+
+  try {
+    await prismaClient.decks.delete({
+      where: { id: deckId },
+    });
+  } catch (error) {
+    return response.status(404).json({ error: 'Deck not found' });
+  }
+
+  // TODO: 'Write an integration test which deletes the created deck?',
+  // TODO: 'Add a new open api schema definition for the endpoint',
+
+  return response.json({
+    data: {},
   });
 };
 
