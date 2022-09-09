@@ -2,27 +2,27 @@
 /* eslint-disable no-unused-vars */
 
 import {
-  Cards, CardsInDecks, Decks, Players,
+  Card, CardsInDeck, Deck, Player,
 } from '@prisma/client';
 
 export type PostCardsInDecks = {
-  card_id: CardsInDecks['card_id'];
-  quantity: CardsInDecks['quantity'];
-  is_sideboard: CardsInDecks['is_sideboard'];
+  card_id: CardsInDeck['card_id'];
+  quantity: CardsInDeck['quantity'];
+  is_sideboard: CardsInDeck['is_sideboard'];
 }
 
 export type PostDeck = {
   deck: {
-    name: Decks['name'];
-    player_id: Players['id']
+    name: Deck['name'];
+    player_id: Player['id']
   },
   cards_in_decks: PostCardsInDecks[]
 };
 
 export type MoreThanFourError = {
-  card_id: Cards['id'];
-  name: Cards['name'];
-  count: CardsInDecks['quantity'];
+  card_id: Card['id'];
+  name: Card['name'];
+  count: CardsInDeck['quantity'];
 };
 
 export enum CardColor {

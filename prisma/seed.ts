@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-import { Cards, Players, PrismaClient } from '@prisma/client';
+import { Card, Player, PrismaClient } from '@prisma/client';
 import { faker, SexType } from '@faker-js/faker';
 import _ from 'lodash';
 
@@ -38,7 +38,7 @@ const seeder = async () => {
       const firstName = faker.name.firstName(player.gender as SexType);
       const lastName = faker.name.lastName(player.gender as SexType);
 
-      await prisma.players.create({
+      await prisma.player.create({
         data: {
           first_name: firstName,
           last_name: lastName,
@@ -53,21 +53,21 @@ const seeder = async () => {
   // Seed some decks for the players
   console.log('> Loading player decks...');
 
-  const players = await prisma.players.findMany();
+  const players = await prisma.player.findMany();
   if (players.length === 0) {
     throw Error('No players loaded, please ensure some player data exists in the database');
   }
 
-  const cards = await prisma.cards.findMany({ take: 100 });
+  const cards = await prisma.card.findMany({ take: 100 });
   if (cards.length === 0) {
     throw Error('No cards loaded, please ensure some card data exists in the database');
   }
 
   for (let i = 0; i < 9; i += 1) {
-    const currentPlayer = _.sample(players) as Players;
+    const currentPlayer = _.sample(players) as Player;
 
     // eslint-disable-next-line no-await-in-loop
-    await prisma.decks.create({
+    await prisma.deck.create({
       data: {
         name: `${_.upperFirst(faker.word.adverb())} ${_.upperFirst(faker.word.noun())}`,
         player: {
@@ -77,27 +77,27 @@ const seeder = async () => {
         cards_in_decks: {
           create: [
             {
-              card_id: _.sample<Cards>(cards)?.id as number,
+              card_id: _.sample<Card>(cards)?.id as number,
               quantity: parseInt(faker.random.numeric(1), 10),
               is_sideboard: _.sample<boolean>([true, false]) as boolean,
             },
             {
-              card_id: _.sample<Cards>(cards)?.id as number,
+              card_id: _.sample<Card>(cards)?.id as number,
               quantity: parseInt(faker.random.numeric(1), 10),
               is_sideboard: _.sample<boolean>([true, false]) as boolean,
             },
             {
-              card_id: _.sample<Cards>(cards)?.id as number,
+              card_id: _.sample<Card>(cards)?.id as number,
               quantity: parseInt(faker.random.numeric(1), 10),
               is_sideboard: _.sample<boolean>([true, false]) as boolean,
             },
             {
-              card_id: _.sample<Cards>(cards)?.id as number,
+              card_id: _.sample<Card>(cards)?.id as number,
               quantity: parseInt(faker.random.numeric(1), 10),
               is_sideboard: _.sample<boolean>([true, false]) as boolean,
             },
             {
-              card_id: _.sample<Cards>(cards)?.id as number,
+              card_id: _.sample<Card>(cards)?.id as number,
               quantity: parseInt(faker.random.numeric(1), 10),
               is_sideboard: _.sample<boolean>([true, false]) as boolean,
             },

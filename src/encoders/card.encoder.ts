@@ -1,6 +1,6 @@
-import { Cards } from '@prisma/client';
+import { Card } from '@prisma/client';
 
-const cardEncoder = (card: Cards) => ({
+const cardEncoder = (card: Card) => ({
   id: card.id,
   border_color: card.borderColor,
   color_identity: card.colorIdentity,

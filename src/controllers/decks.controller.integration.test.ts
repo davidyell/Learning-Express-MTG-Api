@@ -9,12 +9,12 @@ describe('Decks controller integration tests', () => {
    * @see https://github.com/prisma/prisma/discussions/2792
    */
   it('should create a new deck', async () => {
-    const player = await prismaClient.players.findFirst();
+    const player = await prismaClient.player.findFirst();
     if (player === null) throw Error('No players found');
 
     const postData = {...exampleDeck};
 
-    const newDeck = await prismaClient.decks.create({
+    const newDeck = await prismaClient.deck.create({
       data: {
         name: postData.deck.name,
         player_id: player.id,

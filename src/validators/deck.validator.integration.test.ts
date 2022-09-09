@@ -9,7 +9,7 @@ describe('Validating a decks cards', () => {
 
   it('should be valid when lands are in the deck', async () => {
     const cardIds = exampleDeck.cards_in_decks.map((card) => card.card_id);
-    const cardData = await prismaClient.cards.findMany({ where: { id: { in: cardIds } } });
+    const cardData = await prismaClient.card.findMany({ where: { id: { in: cardIds } } });
     const validator = new DeckValidator(exampleDeck.cards_in_decks, cardData);
 
     expect(validator.hasLands()).toBeTruthy;
@@ -28,7 +28,7 @@ describe('Validating a decks cards', () => {
     newDeck.cards_in_decks = cardsInDeckWithNoLands;
 
     const cardIds = newDeck.cards_in_decks.map((card) => card.card_id);
-    const cardData = await prismaClient.cards.findMany({ where: { id: { in: cardIds } } });
+    const cardData = await prismaClient.card.findMany({ where: { id: { in: cardIds } } });
     const validator = new DeckValidator(newDeck.cards_in_decks, cardData);
 
     expect(validator.hasLands()).toBeFalsy;
@@ -36,7 +36,7 @@ describe('Validating a decks cards', () => {
 
   it('should ensure mana generation matches deck cards', async () => {
     const cardIds = exampleDeck.cards_in_decks.map((card) => card.card_id);
-    const cardData = await prismaClient.cards.findMany({ where: { id: { in: cardIds } } });
+    const cardData = await prismaClient.card.findMany({ where: { id: { in: cardIds } } });
     const validator = new DeckValidator(exampleDeck.cards_in_decks, cardData);
 
     expect(validator.missingManaForColor()).toHaveLength(0);
@@ -54,7 +54,7 @@ describe('Validating a decks cards', () => {
     );
     
     const cardIds = newDeck.cards_in_decks.map((card) => card.card_id);
-    const cardData = await prismaClient.cards.findMany({ where: { id: { in: cardIds } } });
+    const cardData = await prismaClient.card.findMany({ where: { id: { in: cardIds } } });
     const validator = new DeckValidator(newDeck.cards_in_decks, cardData);
 
     const result = validator.missingManaForColor();
@@ -69,7 +69,7 @@ describe('Validating a decks cards', () => {
     newDeck.cards_in_decks[5].quantity = 9;
 
     const cardIds = newDeck.cards_in_decks.map((card) => card.card_id);
-    const cardData = await prismaClient.cards.findMany({ where: { id: { in: cardIds } } });
+    const cardData = await prismaClient.card.findMany({ where: { id: { in: cardIds } } });
     const validator = new DeckValidator(newDeck.cards_in_decks, cardData);
 
     const result = validator.fourOrMore();
@@ -92,7 +92,7 @@ describe('Validating a decks cards', () => {
     });
 
     const cardIds = newDeck.cards_in_decks.map((card) => card.card_id);
-    const cardData = await prismaClient.cards.findMany({ where: { id: { in: cardIds } } });
+    const cardData = await prismaClient.card.findMany({ where: { id: { in: cardIds } } });
     const validator = new DeckValidator(newDeck.cards_in_decks, cardData);
 
     expect(validator.sideboardSize()).toBeFalsy;
@@ -103,7 +103,7 @@ describe('Validating a decks cards', () => {
     newDeck.cards_in_decks = newDeck.cards_in_decks.slice(0, 8);
 
     const cardIds = newDeck.cards_in_decks.map((card) => card.card_id);
-    const cardData = await prismaClient.cards.findMany({ where: { id: { in: cardIds } } });
+    const cardData = await prismaClient.card.findMany({ where: { id: { in: cardIds } } });
     const validator = new DeckValidator(newDeck.cards_in_decks, cardData);
 
     expect(validator.sideboardSize()).toBeFalsy;
@@ -138,7 +138,7 @@ describe('Validating a decks cards', () => {
     newDeck.cards_in_decks.push(newCards[0], newCards[1]);
 
     const cardIds = newDeck.cards_in_decks.map((card) => card.card_id);
-    const cardData = await prismaClient.cards.findMany({ where: { id: { in: cardIds } } });
+    const cardData = await prismaClient.card.findMany({ where: { id: { in: cardIds } } });
     const validator = new DeckValidator(newDeck.cards_in_decks, cardData);
 
     const result = validator.missingManaForColor();
