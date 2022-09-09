@@ -68,6 +68,7 @@ sqlite> .quit
  - [x] Aggregate count of players decks, and decks cards
  - [x] Create a deck
  - [x] Edit a deck
+ - [x] Delete a deck
  - [x] Validation when creating decks - 4 card max, cast colours with no matching lands, 15 card sideboard, more than 4 lands, etc
  - [x] Specific card endpoint, for FE to see a certain card?
  - [x] Players endpoint

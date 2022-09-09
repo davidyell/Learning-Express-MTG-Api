@@ -109,7 +109,7 @@ model CardsInDecks {
   card_id      Int
   quantity     Int     @default(1)
   is_sideboard Boolean @default(false)
-  decks        Decks   @relation(fields: [deck_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  decks        Decks   @relation(fields: [deck_id], references: [id], onDelete: Cascade)
   cards        Cards   @relation(fields: [card_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([deck_id, card_id], map: "cards_in_decks_deck_id_IDX")

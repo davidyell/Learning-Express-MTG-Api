@@ -74,6 +74,15 @@ paths:
         - decks
       requestBody:
         $ref: '#/components/requestBodies/DeckPayload'
+    delete:
+      summary: Delete a deck
+      description: Delete a single deck and remove the cards in the deck
+      operationId: delete.one.deck
+      responses:
+        '204':
+          description: OK
+        '404':
+          $ref: '#/components/responses/GenericError'
   '/api/decks/{deckId}':
     get:
       summary: View a specific deck

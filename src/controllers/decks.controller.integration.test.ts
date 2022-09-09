@@ -1,5 +1,5 @@
 import prismaClient from '../../prisma/client';
-import ExampleDeck from '../tests/fixtures/create.deck';
+import exampleDeck from '../tests/fixtures/example.deck.payload';
 
 describe('Decks controller integration tests', () => {
 
@@ -12,7 +12,7 @@ describe('Decks controller integration tests', () => {
     const player = await prismaClient.players.findFirst();
     if (player === null) throw Error('No players found');
 
-    const postData = {...ExampleDeck};
+    const postData = {...exampleDeck};
 
     const newDeck = await prismaClient.decks.create({
       data: {

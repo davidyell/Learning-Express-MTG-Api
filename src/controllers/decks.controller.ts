@@ -149,7 +149,19 @@ const edit = async (request: Request, response: Response) => {
   return response.json(responseData);
 };
 
-const remove = async (request: Request, response: Response) => response.json({ data: 'A message to confirm deletion' });
+const remove = async (request: Request, response: Response) => {
+  const deckId: Decks['id'] = parseInt(request.params.id, 10);
+
+  try {
+    await prismaClient.decks.delete({
+      where: { id: deckId },
+    });
+  } catch (error) {
+    return response.status(404).json({ error: 'Deck not found' });
+  }
+
+  return response.status(204);
+};
 
 export {
   index,
