@@ -4,14 +4,14 @@ A project to learn Node.js, Express.js and Typescript
 ## What?
 It provides a crud [OpenAPI](https://swagger.io/resources/open-api/) json web service with a few endpoints for building Magic the Gathering decks.
 
-Endpoints are documented in the [openapi.yml](https://github.com/davidyell/Learning-Express-MTG-Api/blob/main/openapi.yaml) file in the root of the project.
+Endpoints are documented in the [openapi.yml](https://github.com/davidyell/Learning-Express-MTG-Api/blob/main/openapi-dist.yaml) file in the root of the project.
 
 ### Visualise the api
 You can import the yaml into the Swagger editor to visualise the api.
 
 * Visit https://editor-next.swagger.io/
 * File > Import URL
-* Enter `https://raw.githubusercontent.com/davidyell/Learning-Express-MTG-Api/main/openapi.yaml`
+* Enter `https://raw.githubusercontent.com/davidyell/Learning-Express-MTG-Api/main/openapi-dist.yaml`
 
 ## Installation
 For *first time* install, after the dependancies, you'll need to populate the database with some data.
@@ -57,34 +57,6 @@ sqlite> .quit
 :mortar_board: I bought an excellent Typescript course on Udemy. [Understanding TypeScript - 2022 Edition](https://www.udemy.com/course/understanding-typescript/)
 
 :tv: They also have a great YouTube channel [Academind](https://www.youtube.com/academind)
-
-# :hammer_and_wrench: TODO
- - [x] Setup correct auto-reload and restart Express when files change in package.json
- - [x] Normalise the database to separate cards and counts
- - [ ] Implement a basic Docker container
- - [ ] Automated card data download and install into database
- - [x] Allow the database to be built, rather than downloaded from the repo
- - [x] Code for formatting api response shapes
- - [x] Aggregate count of players decks, and decks cards
- - [x] Create a deck
- - [x] Edit a deck
- - [x] Delete a deck
- - [x] Validation when creating decks - 4 card max, cast colours with no matching lands, 15 card sideboard, more than 4 lands, etc
- - [x] Specific card endpoint, for FE to see a certain card?
- - [x] Players endpoint
- - [x] Get database under 100mb by removing extra card tables and columns
- - [ ] Aggregate deck meta and persist to data storage. eg, Card type counts, mana curve, count by colour, etc
- - [ ] Validator for alternative build formats than Constructed / Standard
- - [x] Enhance validation for multi-colour cards
- - [ ] Validate decks for legality
- - [x] Github action to run tests against PRs
- - [ ] Create CI sqlite3 import script which reduces the data inserted
- - [x] Complete open api spec response body definitions
- - [x] Refactor shared open api spec responses into schemas
- - [ ] Work to better encapsulate request data validation so it's not all in the controller
- - [ ] Refactor Prisma to make models singular `const card: Card`, check if it changes the client api `prisma.card.findMany()`
- - [ ] Refactor edit functionality to cope with optional payload properties, like updating a deck name, but not it's cards
- - [ ] Maybe add a sub-resource for sideboards? `/api/decks/{deckId}/sideboard`
 
  ## License
 
