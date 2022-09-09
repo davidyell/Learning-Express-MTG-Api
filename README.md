@@ -17,25 +17,12 @@ You can import the yaml into the Swagger editor to visualise the api.
 For *first time* install, after the dependancies, you'll need to populate the database with some data.
 
 * Install the dependancies with `yarn install`
-* Generate the Prisma orm client `yarn prisma generate`
 * Copy the `.env.example` file to `.env` and update your database path
-* Create the database schema `yarn prisma db push`
-* Insert the card data from `infrastructure/sql` using sqlite3 cli, `.read ./infrastructure/sql/import-all.sql` and wait for it finish (roughly 3 minutes).
+* Create the database and schema `yarn prisma db push`
+* Insert the card data `sqlite3 -init ./infrastructure/sql/import-all.sql ./infrastructure/database.sqlite` then `.quit` (takes about 2 mins)
 * Seed some players and decks `yarn prisma db seed`
 * Run the dev server `yarn run dev`
 * Visit http://localhost:3001/api/decks or send a request from [Postman](https://www.postman.com/downloads/) to see some MtG decks
-
-### Inserting data into the tables
-I have found it easiest to insert the `sql` files using `sqlite3` on the command line. There is a batch script to import all the files. It will take a few minutes.
-
-```bash
-sqlite3 infrastructure/database.sqlite
-
-sqlite> .read ./infrastructure/sql/import-all.sql
-sqlite> .quit
-```
-
-[More information in the Sqlite docs](https://www.sqlite.org/cli.html#reading_sql_from_a_file)
 
 ----
 ## References
