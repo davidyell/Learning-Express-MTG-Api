@@ -1,5 +1,4 @@
 /* eslint-disable no-continue */
-
 import { CardsInDeck, Deck } from '@prisma/client';
 
 import fs = require('fs')
@@ -33,6 +32,7 @@ const findCard = async (
       select: { id: true, name: true },
       where: {
         name: cardName,
+        // TODO: Availability etc could be a config option object
         availability: { contains: 'paper' },
       },
     });
@@ -82,30 +82,32 @@ const importDeck = async (): Promise<ImportedDeck> => {
       continue;
     }
 
-    // Cope with the sideboard, which should be 'SB: Quantity Name'
-    const sideboardMatches = line.matchAll(/^SB:\s([\d]){1,2}\s(.*)$/ig);
-    if (sideboardMatches !== null) {
-      const sideboardQuantityAndName = [...sideboardMatches];
-      if (sideboardQuantityAndName.length === 0) continue;
-
-      deckData.cardsInDeck.push(await findCard(
-        sideboardQuantityAndName[0][2],
-        parseInt(sideboardQuantityAndName[0][2], 10),
-        true,
-      ));
-    }
+    // TODO: Refactor this duplicated code
 
     // Cope with the bulk of the deck, which should be 'Quantity Name'
     const deckMatches = line.matchAll(/^([\d]){1,2}\s(.*)$/ig);
     if (deckMatches !== null) {
       const quantityAndName = [...deckMatches];
-      if (quantityAndName.length === 0) continue;
+      if (quantityAndName.length > 0) {
+        deckData.cardsInDeck.push(await findCard(
+          quantityAndName[0][2],
+          parseInt(quantityAndName[0][1], 10),
+          false,
+        ));
+      }
+    }
 
-      deckData.cardsInDeck.push(await findCard(
-        quantityAndName[0][2],
-        parseInt(quantityAndName[0][2], 10),
-        false,
-      ));
+    // Cope with the sideboard, which should be 'SB: Quantity Name'
+    const sideboardMatches = line.matchAll(/^SB:\s([\d]){1,2}\s(.*)$/ig);
+    if (sideboardMatches !== null) {
+      const sideboardQuantityAndName = [...sideboardMatches];
+      if (sideboardQuantityAndName.length > 0) {
+        deckData.cardsInDeck.push(await findCard(
+          sideboardQuantityAndName[0][2],
+          parseInt(sideboardQuantityAndName[0][1], 10),
+          true,
+        ));
+      }
     }
   }
 
