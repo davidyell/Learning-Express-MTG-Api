@@ -20,8 +20,6 @@ type ImportedDeck = {
   cardsInDeck: ImportedCardInDeck[]
 }
 
-const filePath = '../tests/fixtures/decks';
-
 const findCard = async (
   cardName: string,
   quantity: number,
@@ -50,8 +48,8 @@ const findCard = async (
   }
 };
 
-const importDeck = async (): Promise<ImportedDeck> => {
-  const deckFile = path.resolve(__dirname, filePath, 'Izzet Murktide a Modern deck by Notoriouss.dec');
+const importDeck = async (filePath: string): Promise<ImportedDeck> => {
+  const deckFile = path.resolve(__dirname, filePath);
   const fileStream = fs.createReadStream(deckFile);
 
   const rl = readline.createInterface({
