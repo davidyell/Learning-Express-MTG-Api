@@ -16,7 +16,23 @@ describe('Importing a deck', () => {
     expect(result.cardsInDeck.filter((card) => card.is_sideboard === true)).toHaveLength(9);
   });
 
-  it('should fail to import `4 Color Omnath` from file for missing card', async () => {
-    expect(async () => await importDeck('../tests/fixtures/decks/4 Color Omnath a Modern deck by Antoine57437.dec')).rejects.toThrowError();
+  it('should import `4 Color Omnath` from file with missing cards', async () => {
+    const result = await importDeck('../tests/fixtures/decks/4 Color Omnath a Modern deck by Antoine57437.dec');
+
+    expect(result.deck.name).toEqual('4 Color Omnath a Modern deck by Antoine57437');
+    expect(result.cardsInDeck).toHaveLength(40);
+    expect(result.cardsNotFound).toHaveLength(2);
+    expect(result.cardsInDeck.filter((card) => card.is_sideboard === false)).toHaveLength(30);
+    expect(result.cardsInDeck.filter((card) => card.is_sideboard === true)).toHaveLength(10);
+  });
+
+  it('should import `Burn` from file with missing cards', async () => {
+    const result = await importDeck('../tests/fixtures/decks/Burn a Modern deck by Michael Barnes.dec');
+
+    expect(result.deck.name).toEqual('Burn a Modern deck by Michael Barnes');
+    expect(result.cardsInDeck).toHaveLength(23);
+    expect(result.cardsNotFound).toHaveLength(1);
+    expect(result.cardsInDeck.filter((card) => card.is_sideboard === false)).toHaveLength(17);
+    expect(result.cardsInDeck.filter((card) => card.is_sideboard === true)).toHaveLength(6);
   });
 });

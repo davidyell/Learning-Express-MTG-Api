@@ -17,7 +17,8 @@ type ImportedDeck = {
   deck: {
     name: Deck['name']
   },
-  cardsInDeck: ImportedCardInDeck[]
+  cardsInDeck: ImportedCardInDeck[],
+  cardsNotFound: string[],
 }
 
 const findCard = async (
@@ -29,7 +30,10 @@ const findCard = async (
     const card = await prismaClient.card.findFirstOrThrow({
       select: { id: true, name: true },
       where: {
-        name: cardName,
+        OR: [
+          { name: cardName },
+          { faceName: cardName },
+        ],
         // TODO: Availability etc could be a config option object
         availability: { contains: 'paper' },
       },
@@ -42,8 +46,6 @@ const findCard = async (
       is_sideboard: sideboard,
     };
   } catch (error) {
-    // TODO: Handle errors in a better way
-    // TODO: How to lookup double faced cards? Like https://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=540967
     throw new Error(`Tried find a card named "${cardName}" but didn't find it`);
   }
 };
@@ -62,6 +64,7 @@ const importDeck = async (filePath: string): Promise<ImportedDeck> => {
       name: '',
     },
     cardsInDeck: [],
+    cardsNotFound: [],
   };
 
   // eslint-disable-next-line no-restricted-syntax
@@ -100,11 +103,16 @@ const importDeck = async (filePath: string): Promise<ImportedDeck> => {
 
     // Build and push the object
     if (matchesArray.length > 0) {
-      deckData.cardsInDeck.push(await findCard(
-        matchesArray[0][2],
-        parseInt(matchesArray[0][1], 10),
-        isSideboard,
-      ));
+      try {
+        const cardInDeck = await findCard(
+          matchesArray[0][2],
+          parseInt(matchesArray[0][1], 10),
+          isSideboard,
+        );
+        deckData.cardsInDeck.push(cardInDeck);
+      } catch (error) {
+        deckData.cardsNotFound.push(matchesArray[0][2]);
+      }
     }
   }
 
