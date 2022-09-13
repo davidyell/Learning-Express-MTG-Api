@@ -1,31 +1,29 @@
 /* eslint-disable no-continue */
-import { CardsInDeck, Deck } from '@prisma/client';
-
+import { Deck } from '@prisma/client';
 import fs = require('fs')
 import path = require('path')
 import readline = require('readline');
 import prismaClient from '../../prisma/client';
-
-type ImportedCardInDeck = {
-  card_name: string | null,
-  card_id: CardsInDeck['id'],
-  quantity: CardsInDeck['quantity'],
-  is_sideboard: CardsInDeck['is_sideboard']
-}
+import { PostCardsInDecks } from '../types/deck.types';
 
 type ImportedDeck = {
   deck: {
     name: Deck['name']
   },
-  cardsInDeck: ImportedCardInDeck[],
+  cardsInDeck: PostCardsInDecks[],
   cardsNotFound: string[],
 }
 
+/**
+ * Find a card by either it's `name` or `faceName` in the case of double sided cards
+ *
+ * @throws Error if the card is not in the database
+ */
 const findCard = async (
   cardName: string,
   quantity: number,
   sideboard: boolean,
-): Promise<ImportedCardInDeck> => {
+): Promise<PostCardsInDecks> => {
   try {
     const card = await prismaClient.card.findFirstOrThrow({
       select: { id: true, name: true },
@@ -41,7 +39,6 @@ const findCard = async (
 
     return {
       card_id: card.id,
-      card_name: card.name,
       quantity,
       is_sideboard: sideboard,
     };
@@ -50,8 +47,14 @@ const findCard = async (
   }
 };
 
+/**
+ * Import a `.dec` file and convert it into an `ImportedDeck` object, so
+ * it can be inserted into the data storage
+ *
+ * @param filePath The path of the file
+ */
 const importDeck = async (filePath: string): Promise<ImportedDeck> => {
-  const deckFile = path.resolve(__dirname, filePath);
+  const deckFile = path.resolve(__dirname, '../', filePath);
   const fileStream = fs.createReadStream(deckFile);
 
   const rl = readline.createInterface({

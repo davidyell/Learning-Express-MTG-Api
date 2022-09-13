@@ -3,6 +3,7 @@
 import { Card, Player, PrismaClient } from '@prisma/client';
 import { faker, SexType } from '@faker-js/faker';
 import _ from 'lodash';
+import importDeck from '../src/utils/import.deck';
 
 const prisma = new PrismaClient();
 
@@ -31,7 +32,7 @@ const playersFixture = [
 
 const seeder = async () => {
   // Seed some players
-  console.log('> Loading players...');
+  console.log('> Creating players...');
 
   await Promise.all(
     playersFixture.map(async (player) => {
@@ -51,7 +52,7 @@ const seeder = async () => {
   );
 
   // Seed some decks for the players
-  console.log('> Loading player decks...');
+  console.log('> Creating random player decks...');
 
   const players = await prisma.player.findMany();
   if (players.length === 0) {
@@ -106,6 +107,41 @@ const seeder = async () => {
       },
     });
   }
+
+  // Add a complete deck to a single player
+  const player = _.sample(players) as Player;
+  console.log(`> Importing valid deck to player "${player.id}"...`);
+
+  const importedDeck = await importDeck('../src/tests/fixtures/decks/Izzet Murktide a Modern deck by Notoriouss.dec');
+  await prisma.deck.create({
+    data: {
+      name: importedDeck.deck.name,
+      player: {
+        connect: { id: player.id },
+      },
+      created: new Date(),
+      cards_in_decks: {
+        create: importedDeck.cardsInDeck,
+      },
+    },
+  });
+
+  // Add a deck with missing cards to a single player
+  console.log(`> Importing deck with missing cards to player "${player.id}"...`);
+
+  const importedDeckWithMissingCards = await importDeck('../src/tests/fixtures/decks/Burn a Modern deck by Michael Barnes.dec');
+  await prisma.deck.create({
+    data: {
+      name: importedDeckWithMissingCards.deck.name,
+      player: {
+        connect: { id: player.id },
+      },
+      created: new Date(),
+      cards_in_decks: {
+        create: importedDeckWithMissingCards.cardsInDeck,
+      },
+    },
+  });
 };
 
 seeder()
