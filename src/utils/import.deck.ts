@@ -82,32 +82,31 @@ const importDeck = async (): Promise<ImportedDeck> => {
       continue;
     }
 
-    // TODO: Refactor this duplicated code
+    const regexes = {
+      deck: /^([\d]){1,2}\s(.*)$/ig,
+      sideboard: /^SB:\s([\d]){1,2}\s(.*)$/ig,
+    };
 
-    // Cope with the bulk of the deck, which should be 'Quantity Name'
-    const deckMatches = line.matchAll(/^([\d]){1,2}\s(.*)$/ig);
-    if (deckMatches !== null) {
-      const quantityAndName = [...deckMatches];
-      if (quantityAndName.length > 0) {
-        deckData.cardsInDeck.push(await findCard(
-          quantityAndName[0][2],
-          parseInt(quantityAndName[0][1], 10),
-          false,
-        ));
+    // Detect the type of line
+    let isSideboard = false;
+    let matchesIterator = line.matchAll(regexes.deck);
+    let matchesArray = [...matchesIterator];
+
+    if (matchesArray.length === 0) {
+      matchesIterator = line.matchAll(regexes.sideboard);
+      matchesArray = [...matchesIterator];
+      if (matchesArray.length > 0) {
+        isSideboard = true;
       }
     }
 
-    // Cope with the sideboard, which should be 'SB: Quantity Name'
-    const sideboardMatches = line.matchAll(/^SB:\s([\d]){1,2}\s(.*)$/ig);
-    if (sideboardMatches !== null) {
-      const sideboardQuantityAndName = [...sideboardMatches];
-      if (sideboardQuantityAndName.length > 0) {
-        deckData.cardsInDeck.push(await findCard(
-          sideboardQuantityAndName[0][2],
-          parseInt(sideboardQuantityAndName[0][1], 10),
-          true,
-        ));
-      }
+    // Build and push the object
+    if (matchesArray.length > 0) {
+      deckData.cardsInDeck.push(await findCard(
+        matchesArray[0][2],
+        parseInt(matchesArray[0][1], 10),
+        isSideboard,
+      ));
     }
   }
 
