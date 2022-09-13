@@ -1,5 +1,10 @@
 import { uniq } from 'lodash';
 
+/**
+ * Convert a letter mana casting cost into an array of colors
+ *
+ * eg, `{1}{W}{G}` becomes `['W', 'G']`
+ */
 const manaStringToArray = (manaCost: string | null): string[] => {
   const requiredColors: string[] = [];
 
