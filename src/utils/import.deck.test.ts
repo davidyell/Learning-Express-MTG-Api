@@ -7,7 +7,6 @@ describe('Importing a deck', () => {
     expect(result.deck.name).toEqual('Izzet Murktide a Modern deck by Notoriouss');
     expect(result.cardsInDeck).toHaveLength(31);
     expect(result.cardsInDeck[0]).toEqual({
-      card_name: 'Dragon\'s Rage Channeler',
       card_id: 38055,
       quantity: 3,
       is_sideboard: false
