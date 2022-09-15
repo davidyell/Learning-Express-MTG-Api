@@ -24,6 +24,8 @@ paths:
     $ref: './resources/decks/decks.yaml'
   '/api/decks/{deckId}':
     $ref: './resources/decks/deck.yaml'
+  /api/cards/search:
+    $ref: './resources/cards/cards.yml'
   '/api/cards/{cardId}':
     $ref: './resources/cards/card.yaml'
   /api/players:

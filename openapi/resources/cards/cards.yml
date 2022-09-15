@@ -1,0 +1,91 @@
+get:
+  summary: List cards with filtering
+  description: |
+    Lists cards by filtering them by various criteria
+    - `name` The name of the card, will greedy match. `llanowar` would return all cards containing that
+    - `color` The card color, will match mutli-color cards
+    - `type` Matches on card type or supertype, like `Creature` or `Land`
+    - `manacost` Filters by the converted mana cost
+    - `ability` Filter on abilities like `Flash` or `Vigilance
+    - `power` Filter on attack power
+    - `toughness` Filter on toughness
+    - `rarity` Filter by card rarity like `rare` or `uncommon`
+  operationId: search.for.cards
+  parameters:
+    - name: name
+      in: query
+      description: Card name, either face for double sided cards
+      schema:
+        type: string
+    - name: color
+      in: query
+      description: Color of the card, will find multi color cards
+      schema:
+        type: string
+        enum:
+          - Red
+          - Black
+          - Green
+          - Blue
+          - White
+    - name: type
+      in: query
+      description: Card type filtering
+      schema:
+        type: string
+    - name: manacost
+      in: query
+      description: Converted mana cost
+      schema:
+        type: number
+    - name: ability
+      in: query
+      description: Card keyword abilities
+      schema:
+        type: string
+    - name: power
+      in: query
+      description: Exact match of creature power
+      schema:
+        type: number
+    - name: toughness
+      in: query
+      description: Exact match of createure toughness
+      schema:
+        type: number
+    - name: rarity
+      in: query
+      description: Filter by a single card rarity
+      schema:
+        type: string
+        enum:
+          - uncommon
+          - common
+          - rare
+          - mythic
+          - special
+          - bonus
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              data:
+                type: object
+                additionalProperties: false
+                properties:
+                  cards:
+                    type: array
+                    $ref: '../../schemas/card.yaml'
+                  meta:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      count:
+                        type: number
+  tags:
+    - cards
