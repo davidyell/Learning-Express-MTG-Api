@@ -23,11 +23,11 @@ get:
       schema:
         type: string
         enum:
-          - Red
-          - Black
-          - Green
-          - Blue
-          - White
+          - red
+          - black
+          - green
+          - blue
+          - white
     - name: type
       in: query
       description: Card type filtering

@@ -1,9 +1,7 @@
-/* eslint-disable no-shadow */
-/* eslint-disable no-unused-vars */
-
 import {
   Card, CardsInDeck, Deck, Player,
 } from '@prisma/client';
+import { CardColor } from './card.types';
 
 export type PostCardsInDecks = {
   card_id: CardsInDeck['card_id'];
@@ -24,14 +22,6 @@ export type MoreThanFourError = {
   name: Card['name'];
   count: CardsInDeck['quantity'];
 };
-
-export enum CardColor {
-  R = 'Red',
-  W = 'White',
-  G = 'Green',
-  B = 'Black',
-  U = 'Blue',
-}
 
 export type MissingManaError = {
   color: CardColor
