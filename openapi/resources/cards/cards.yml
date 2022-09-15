@@ -80,7 +80,8 @@ get:
                 properties:
                   cards:
                     type: array
-                    $ref: '../../schemas/card.yaml'
+                    items:
+                      $ref: '../../schemas/card.yaml'
                   meta:
                     type: object
                     additionalProperties: false

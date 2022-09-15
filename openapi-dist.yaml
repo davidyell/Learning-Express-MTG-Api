@@ -235,7 +235,8 @@ paths:
                     properties:
                       cards:
                         type: array
-                        $ref: '#/components/schemas/Card'
+                        items:
+                          $ref: '#/components/schemas/Card'
                       meta:
                         type: object
                         additionalProperties: false
