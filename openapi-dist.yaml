@@ -242,6 +242,8 @@ paths:
                         properties:
                           count:
                             type: number
+      tags:
+        - cards
   '/api/cards/{cardId}':
     get:
       summary: View a single cards data
