@@ -4,7 +4,7 @@ import {
 } from 'lodash';
 import manaStringToArray from '../utils/mana.converter';
 import type { DeckValidationErrors, MissingManaError, MoreThanFourError } from '../types/deck.types';
-import { CardColor } from '../types/deck.types';
+import { CardColor } from '../types/card.types';
 
 // Define a new type for a deck which allows for both saved and unsaved decks
 type PartialCardsInDecks = Omit<CardsInDeck, 'id' | 'deck_id'> | CardsInDeck;

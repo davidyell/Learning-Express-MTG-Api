@@ -8,7 +8,7 @@
     "lint:fix": "eslint -c .eslintrc.json --fix \"./src/**/*.ts\"",
     "lint:ci": "eslint -c .eslintrc.json \"./src/**/*.ts\"",
     "build": "tsc",
-    "validate": "tsc --noEmit",
+    "validate": "tsc --noEmit --skipLibCheck",
     "test": "jest",
     "test:ci": "jest --colors --ci",
     "openapi:build": "swagger-cli bundle --type yaml --outfile ./openapi-dist.yaml ./openapi/openapi.yaml",
