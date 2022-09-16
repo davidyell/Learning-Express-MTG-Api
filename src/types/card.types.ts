@@ -1,18 +1,20 @@
+/* eslint-disable no-unused-vars */
+
 export enum CardColor {
-  R = 'Red',
-  W = 'White',
-  G = 'Green',
-  B = 'Black',
-  U = 'Blue',
-};
+  red = 'R',
+  white = 'W',
+  green = 'G',
+  black = 'B',
+  blue = 'U',
+}
 
 export enum CardRarity {
-  'common',
-  'uncommon',
-  'rare',
-  'mythic',
-  'special',
-  'bonus'
+  common = 'common',
+  uncommon = 'uncommon',
+  rare = 'rare',
+  mythic = 'mythic',
+  special = 'special',
+  bonus = 'bonus'
 }
 
 export type CardSearchFilters = {
@@ -21,7 +23,7 @@ export type CardSearchFilters = {
   type?: string;
   manacost?: number;
   ability?: string;
-  power?: number;
-  toughness?: number;
+  power?: string;
+  toughness?: string;
   rarity?: CardRarity;
 }
