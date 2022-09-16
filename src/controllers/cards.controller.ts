@@ -1,23 +1,26 @@
 import { Request, Response } from 'express';
 import cardEncoder from '../encoders/card.encoder';
 import prismaClient from '../../prisma/client';
-import parseQueryParams from '../utils/card-search.filter';
+import { filterToWhereClause, parseQueryParams } from '../utils/card-search.filter';
 
 const search = async (request: Request, response: Response) => {
   const filter = parseQueryParams(request.query);
+  const whereOptions = filterToWhereClause(filter);
 
-  const whereOptions = {};
-
-  // TODO: See which ones are set and apply the query required
-
-  // Query the database
   const results = await prismaClient.card.findMany({
     where: whereOptions,
   });
 
-  return response.json({
-    data: {},
-  });
+  const responseData = {
+    data: {
+      cards: results.map((card) => cardEncoder(card)),
+      meta: {
+        count: results.length,
+      },
+    },
+  };
+
+  return response.json(responseData);
 };
 
 const view = async (request: Request, response: Response) => {
