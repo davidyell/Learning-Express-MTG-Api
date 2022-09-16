@@ -5,33 +5,31 @@ describe('Parsing query parameters', () => {
   test.each([
     {
       case: 'Power',
-      params: { name: 'llanowar', power: '1' },
-      expected: { name: 'llanowar', power: 1 }
+      params: { name: 'llanowar', power: '+3' },
+      expected: { name: 'llanowar', power: '+3' }
     },
     {
       case: 'Toughness',
-      params: { rarity: 'rare', toughness: '6' },
-      expected: { rarity: 'rare', toughness: 6 }
+      params: { rarity: 'rare', toughness: '7-*' },
+      expected: { rarity: 'rare', toughness: '7-*' }
     },
     {
-      case: 'Manacost',
+      case: 'Manacost integer',
       params: { color: 'red', manacost: '4' },
       expected: { color: 'red', manacost: 4 }
+    },
+    {
+      case: 'Manacost float',
+      params: { manacost: '0.5' },
+      expected: { manacost: 0.5 }
+    },
+    {
+      case: 'Manacost zero',
+      params: { manacost: '0' },
+      expected: { manacost: 0 }
     },
   ])('Can parse params $case', ({ params, expected }) => {
     const result = parseQueryParams(params);
     expect(result).toEqual(expected);
-  });
-
-  it('should ignore invalid params', () => {
-    const params: Query = {
-      manacost: 'Badger',
-      power: 'Weasel',
-      toughness: 'Fox'
-    };
-
-    const result = parseQueryParams(params);
-
-    expect(result).toEqual({});
   });
 });

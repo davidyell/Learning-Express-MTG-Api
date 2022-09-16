@@ -11,24 +11,12 @@ import type { CardSearchFilters } from '../types/card.types';
 const parseQueryParams = (query: Query): CardSearchFilters => {
   const params: CardSearchFilters = { ...query };
 
-  const manacost = parseInt(query.manacost as string, 10);
-  const power = parseInt(query.power as string, 10);
-  const toughness = parseInt(query.toughness as string, 10);
+  const manacost = parseFloat(query.manacost as string);
 
   if (query.manacost && isFinite(manacost)) {
     params.manacost = manacost;
   } else {
     delete params.manacost;
-  }
-  if (query.power && isFinite(power)) {
-    params.power = power;
-  } else {
-    delete params.power;
-  }
-  if (query.toughness && isFinite(toughness)) {
-    params.toughness = toughness;
-  } else {
-    delete params.toughness;
   }
 
   return params;
