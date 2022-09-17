@@ -115,4 +115,8 @@ describe('Decks controller integration tests', () => {
     expect(result).toEqual(expected);
     expect(prismaMock.deck.findUniqueOrThrow).toBeCalledTimes(1)
   });
+
+  it.skip('should return deck validation errors', () => {
+    // TODO: Write this test
+  });
 });
