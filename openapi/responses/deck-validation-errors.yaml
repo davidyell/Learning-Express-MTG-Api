@@ -5,9 +5,14 @@ content:
       type: object
       additionalProperties: false
       properties:
+        data:
+          type: object
+          readOnly: true
         error:
           type: object
           required:
+            - message
+            - code
             - hasLands
             - missingManaForColor
             - fourOrMore
@@ -15,6 +20,12 @@ content:
             - deckSize
           additionalProperties: false
           properties:
+            message:
+              type: string
+              readOnly: true
+            code:
+              type: string
+              readOnly: true
             hasLands:
               type: boolean
             missingManaForColor:

@@ -5,9 +5,23 @@ content:
       type: object
       additionalProperties: false
       properties:
-        error:
-          type: string
+        data:
+          type: object
           readOnly: true
+          required:
+            - message
+            - code
+        error:
+          type: object
+          additionalProperties: false
+          readOnly: true
+          properties:
+            message:
+              type: string
+              readOnly: true
+            code:
+              type: string
+              readOnly: true
       required:
         - error
       readOnly: true
