@@ -16,7 +16,9 @@
     ],
     "rules": {
         "import/extensions": "off",
-        "import/no-unresolved": "off"
+        "import/no-unresolved": "off",
+        "no-shadow": "off",
+        "@typescript-eslint/no-shadow": "error"
      },
      "ignorePatterns": ["**/*test*.ts"]
 }

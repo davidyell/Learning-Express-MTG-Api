@@ -6,7 +6,7 @@ import {
   edit as DeckEdit,
   remove as DeckRemove,
 } from '../controllers/decks.controller';
-import { view as CardView } from '../controllers/cards.controller';
+import { search as CardSearch, view as CardView } from '../controllers/cards.controller';
 import { index as PlayerIndex, view as PlayerView } from '../controllers/players.controller';
 
 const router = Router();
@@ -17,6 +17,10 @@ router.get('/api/decks', (request: Request, response: Response) => {
 
 router.get('/api/decks/:id', (request: Request, response: Response) => {
   DeckView(request, response);
+});
+
+router.get('/api/cards/search', (request: Request, response: Response) => {
+  CardSearch(request, response);
 });
 
 router.get('/api/cards/:id', (request: Request, response: Response) => {

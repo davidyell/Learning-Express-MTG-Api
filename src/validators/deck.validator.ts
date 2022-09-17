@@ -4,7 +4,7 @@ import {
 } from 'lodash';
 import manaStringToArray from '../utils/mana.converter';
 import type { DeckValidationErrors, MissingManaError, MoreThanFourError } from '../types/deck.types';
-import { CardColor } from '../types/deck.types';
+import { CardColor } from '../types/card.types';
 
 // Define a new type for a deck which allows for both saved and unsaved decks
 type PartialCardsInDecks = Omit<CardsInDeck, 'id' | 'deck_id'> | CardsInDeck;
@@ -64,15 +64,15 @@ export default class DeckValidator {
 
     allRequiredColors = uniq(allRequiredColors);
 
-    allRequiredColors.forEach((color) => {
-      if (!color.includes('/')) {
-        if (this.hasLands(color as CardColor) === false) {
+    allRequiredColors.forEach((colorLetter) => {
+      if (!colorLetter.includes('/')) {
+        if (this.hasLands(colorLetter as CardColor) === false) {
           errors.push({
-            color: CardColor[color as unknown as keyof typeof CardColor],
+            color: CardColor[colorLetter as unknown as keyof typeof CardColor],
           });
         }
       } else {
-        color.split('/').forEach((orColor) => {
+        colorLetter.split('/').forEach((orColor) => {
           if (this.hasLands(orColor as CardColor) === false) {
             errors.push({
               color: CardColor[orColor as unknown as keyof typeof CardColor],
