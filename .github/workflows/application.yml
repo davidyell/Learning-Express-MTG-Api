@@ -80,5 +80,5 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Run eslint
+      - name: Run tsc
         run: yarn run validate
