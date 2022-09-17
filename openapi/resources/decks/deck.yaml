@@ -27,7 +27,9 @@ get:
                   player:
                     $ref: '../../schemas/player.yaml'
                   cards_in_deck:
-                    $ref: '../../schemas/cards-in-deck.yaml'
+                    type: array
+                    items:
+                      $ref: '../../schemas/cards-in-deck.yaml'
     '404':
       $ref: '../../responses/generic-error.yaml'
   tags:

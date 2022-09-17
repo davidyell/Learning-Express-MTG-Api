@@ -4,7 +4,7 @@ type: object
 additionalProperties: false
 properties:
   id:
-    type: string
+    type: integer
     readOnly: true
   border_color:
     type: string
