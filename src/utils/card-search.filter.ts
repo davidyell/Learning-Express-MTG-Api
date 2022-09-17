@@ -22,9 +22,9 @@ const parseQueryParams = (query: Query): CardSearchFilters => {
 
   if (query.color) {
     // TODO: This doesn't feel like the right way to use a string enum
-    const index = Object.keys(CardColor).indexOf(query.color as string);
+    const index = Object.values(CardColor).indexOf(query.color as unknown as CardColor);
     if (index !== -1) {
-      params.color = Object.values(CardColor)[index];
+      params.color = Object.keys(CardColor)[index] as CardColor;
     }
   } else {
     delete params.color;

@@ -64,15 +64,15 @@ export default class DeckValidator {
 
     allRequiredColors = uniq(allRequiredColors);
 
-    allRequiredColors.forEach((color) => {
-      if (!color.includes('/')) {
-        if (this.hasLands(color as CardColor) === false) {
+    allRequiredColors.forEach((colorLetter) => {
+      if (!colorLetter.includes('/')) {
+        if (this.hasLands(colorLetter as CardColor) === false) {
           errors.push({
-            color: CardColor[color as unknown as keyof typeof CardColor],
+            color: CardColor[colorLetter as unknown as keyof typeof CardColor],
           });
         }
       } else {
-        color.split('/').forEach((orColor) => {
+        colorLetter.split('/').forEach((orColor) => {
           if (this.hasLands(orColor as CardColor) === false) {
             errors.push({
               color: CardColor[orColor as unknown as keyof typeof CardColor],

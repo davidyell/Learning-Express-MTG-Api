@@ -12,7 +12,7 @@ describe('Card filtering utility', () => {
       expected: { rarity: 'rare', toughness: '7-*' }
     },
     {
-      params: { color: 'red', manacost: '4' },
+      params: { color: 'Red', manacost: '4' },
       expected: { color: 'R', manacost: 4 }
     },
     {
@@ -30,7 +30,7 @@ describe('Card filtering utility', () => {
 
   test.each([
     {
-      filter: { name: 'llanowar', color: CardColor.green, type: 'creature' },
+      filter: { name: 'llanowar', color: 'G' as CardColor, type: 'creature' },
       expected: {
         colors: { contains: 'G' },
         name: { contains: 'llanowar' },
@@ -47,7 +47,7 @@ describe('Card filtering utility', () => {
     {
       filter: {
         name: 'goblin',
-        color: CardColor.red,
+        color: 'R' as CardColor,
         type: 'creature',
         manacost: 1,
         ability: 'haste',

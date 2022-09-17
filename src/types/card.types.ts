@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
 
 export enum CardColor {
-  red = 'R',
-  white = 'W',
-  green = 'G',
-  black = 'B',
-  blue = 'U',
+  R = 'Red',
+  W = 'White',
+  G = 'Green',
+  B = 'Black',
+  U = 'Blue',
 }
 
 export enum CardRarity {
