@@ -6,6 +6,7 @@ import cardInDeckEncoder from '../encoders/cardInDeck.encoder';
 import prismaClient from '../../prisma/client';
 import type { PostDeck } from '../types/deck.types';
 import DeckValidator from '../validators/deck.validator';
+import { GenericError, ValidationError } from '../types/error.types';
 
 const index = async (request: Request, response: Response) => {
   const results = await prismaClient.deck.findMany({
@@ -34,9 +35,11 @@ const index = async (request: Request, response: Response) => {
 };
 
 const view = async (request: Request, response: Response) => {
+  const deckId: Deck['id'] = parseInt(request.params.id, 10);
+
   try {
     const result = await prismaClient.deck.findUniqueOrThrow({
-      where: { id: parseInt(request.params.id, 10) },
+      where: { id: deckId },
       include: {
         player: true,
         cards_in_decks: {
@@ -57,7 +60,13 @@ const view = async (request: Request, response: Response) => {
 
     return response.json(responseData);
   } catch (error) {
-    return response.status(404).json({ error: 'No deck found' });
+    return response.status(404).json({
+      data: {},
+      error: {
+        message: `Could not find a deck with id ${deckId}`,
+        code: '404',
+      },
+    } as GenericError);
   }
 };
 
@@ -81,7 +90,14 @@ const create = async (request: Request, response: Response) => {
       return true;
     });
   } catch (error) {
-    return response.status(400).json({ error: isValid });
+    return response.status(400).json({
+      data: {},
+      error: {
+        message: 'Your deck could not be validated',
+        code: '400',
+        ...isValid,
+      },
+    } as ValidationError);
   }
 
   // Save the new deck
@@ -125,7 +141,14 @@ const edit = async (request: Request, response: Response) => {
       return true;
     });
   } catch (error) {
-    return response.status(400).json({ error: isValid });
+    return response.status(400).json({
+      data: {},
+      error: {
+        message: 'Your deck could not be validated',
+        code: '400',
+        ...isValid,
+      },
+    } as ValidationError);
   }
 
   // Update the deck
@@ -157,7 +180,13 @@ const remove = async (request: Request, response: Response) => {
       where: { id: deckId },
     });
   } catch (error) {
-    return response.status(404).json({ error: 'Deck not found' });
+    return response.status(404).json({
+      data: {},
+      error: {
+        message: `Could not find a deck with id ${deckId}`,
+        code: '404',
+      },
+    } as GenericError);
   }
 
   return response.status(204);

@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
+import { Player } from '@prisma/client';
 import playerEncoder from '../encoders/player.encoder';
 import prismaClient from '../../prisma/client';
 import deckEncoder from '../encoders/deck.encoder';
+import { GenericError } from '../types/error.types';
 
 const index = async (request: Request, response: Response) => {
   const results = await prismaClient.player.findMany({
@@ -28,9 +30,11 @@ const index = async (request: Request, response: Response) => {
 };
 
 const view = async (request: Request, response: Response) => {
+  const playerId: Player['id'] = parseInt(request.params.id, 10);
+
   try {
     const result = await prismaClient.player.findUniqueOrThrow({
-      where: { id: parseInt(request.params.id, 10) },
+      where: { id: playerId },
       include: {
         decks: true,
       },
@@ -45,7 +49,13 @@ const view = async (request: Request, response: Response) => {
 
     return response.json(responseData);
   } catch (error) {
-    return response.status(404).json({ error: 'Player not found' });
+    return response.status(404).json({
+      data: {},
+      error: {
+        message: `Player with id ${playerId} could not be found`,
+        code: '404',
+      },
+    } as GenericError);
   }
 };
 
