@@ -12,19 +12,20 @@ get:
             additionalProperties: false
             properties:
               data: 
-                type: object
-                additionalProperties: false
-                properties:
-                  deck:
-                    $ref: '../../schemas/deck.yaml'
-                  player:
-                    $ref: '../../schemas/player.yaml'
-                  meta:
-                    type: object
-                    additionalProperties: false
-                    properties:
-                      card_count:
-                        type: integer
+                type: array
+                items:
+                  type: object
+                  properties:
+                    deck:
+                      $ref: '../../schemas/deck.yaml'
+                    player:
+                      $ref: '../../schemas/player.yaml'
+                    meta:
+                      type: object
+                      additionalProperties: false
+                      properties:
+                        card_count:
+                          type: integer
   parameters: []
   tags:
     - decks
