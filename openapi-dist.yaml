@@ -154,7 +154,7 @@ paths:
         - decks
   /api/cards/search:
     get:
-      summary: List cards with filtering
+      summary: Search for cards
       description: |
         Lists cards by filtering them by various criteria
         - `name` The name of the card, will greedy match. `llanowar` would return all cards containing that
@@ -178,11 +178,11 @@ paths:
           schema:
             type: string
             enum:
-              - red
-              - black
-              - green
-              - blue
-              - white
+              - Red
+              - Black
+              - Green
+              - Blue
+              - White
         - name: type
           in: query
           description: Card type filtering
