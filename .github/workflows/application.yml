@@ -39,7 +39,7 @@ jobs:
       
       - name: Insert data into database
         run: |
-          sqlite3 -init ${GITHUB_WORKSPACE}/infrastructure/sql/import-all.sql ${GITHUB_WORKSPACE}/infrastructure/database.sqlite
+          sqlite3 -init ${GITHUB_WORKSPACE}/infrastructure/sql/import-all.txt ${GITHUB_WORKSPACE}/infrastructure/database.sqlite
           yarn prisma db seed
 
       - name: Run test suite

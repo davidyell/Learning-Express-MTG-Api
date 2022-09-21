@@ -9,8 +9,8 @@
     "lint:ci": "eslint -c .eslintrc.json \"./src/**/*.ts\"",
     "build": "tsc",
     "validate": "tsc --noEmit --skipLibCheck",
-    "test": "jest",
-    "test:ci": "jest --colors --ci",
+    "test": "dotenv -e .env.test jest --color --verbose",
+    "test:ci": "dotenv -e .env.test jest --color --ci",
     "openapi:build": "swagger-cli bundle --type yaml --outfile ./openapi-dist.yaml ./openapi/openapi.yaml",
     "openapi:validate": "swagger-cli validate ./openapi-dist.yaml"
   },
@@ -36,6 +36,7 @@
     "@types/node": "^18.7.7",
     "@typescript-eslint/eslint-plugin": "^5.9.0",
     "@typescript-eslint/parser": "^5.9.0",
+    "dotenv-cli": "^6.0.0",
     "eslint": "^8.6.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.25.4",

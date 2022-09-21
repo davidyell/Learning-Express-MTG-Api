@@ -1,7 +1,10 @@
 node_modules
 yarn-error.log
 
+.env
+
 infrastructure/database.sqlite
+infrastructure/test-database.sqlite
 
 .yarn/*
 !.yarn/cache

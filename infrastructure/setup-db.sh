@@ -7,5 +7,5 @@ if [ ! -f "$FILE" ]; then
 fi
 
 yarn prisma db push
-sqlite3 -init ./infrastructure/sql/cards.sql ./infrastructure/database.sqlite
+sqlite3 -init ./infrastructure/sql/import-all.txt ./infrastructure/database.sqlite
 yarn prisma db seed
