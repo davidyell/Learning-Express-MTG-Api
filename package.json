@@ -9,7 +9,7 @@
     "lint:ci": "eslint -c .eslintrc.json \"./src/**/*.ts\"",
     "build": "tsc",
     "validate": "tsc --noEmit --skipLibCheck",
-    "test": "dotenv -e .env.test jest --color --verbose",
+    "test": "dotenv -e .env.test jest --color",
     "test:ci": "dotenv -e .env.test jest --color --ci",
     "openapi:build": "swagger-cli bundle --type yaml --outfile ./openapi-dist.yaml ./openapi/openapi.yaml",
     "openapi:validate": "swagger-cli validate ./openapi-dist.yaml"
