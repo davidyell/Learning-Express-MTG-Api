@@ -24,6 +24,11 @@ For *first time* install, after the dependancies, you'll need to populate the da
 * Run the dev server `yarn run dev`
 * Visit http://localhost:3001/api/decks or send a request from [Postman](https://www.postman.com/downloads/) to see some MtG decks
 
+## Testing
+Two test suites exist, a unit and integration suite. These can be run with `yarn run test:unit` and `yarn run test:integration`, or run everything with `yarn run test`
+
+An integration testing database must be created for the integration tests to run, which can be setup with `./infrastructure/setup-test-db.sh`, you'll need to quit from `sqlite3` after the import with `.quit`
+
 ----
 ## References
 

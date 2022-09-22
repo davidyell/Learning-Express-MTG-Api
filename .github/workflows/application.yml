@@ -27,7 +27,7 @@ jobs:
       - name: Setup the environment
         run: |
           echo PORT="3001" >> .env
-          echo DATABASE_URL="file:${GITHUB_WORKSPACE}/infrastructure/database.sqlite" >> .env
+          echo DATABASE_URL="file:${GITHUB_WORKSPACE}/infrastructure/ci-database.sqlite" >> .env
           
       - name: Install dependencies
         run: yarn install
@@ -39,7 +39,7 @@ jobs:
       
       - name: Insert data into database
         run: |
-          sqlite3 -init ${GITHUB_WORKSPACE}/infrastructure/sql/import-all.sql ${GITHUB_WORKSPACE}/infrastructure/database.sqlite
+          sqlite3 -init ${GITHUB_WORKSPACE}/infrastructure/sql/import-all.txt ${GITHUB_WORKSPACE}/infrastructure/ci-database.sqlite
           yarn prisma db seed
 
       - name: Run test suite
