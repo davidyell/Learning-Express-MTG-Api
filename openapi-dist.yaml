@@ -362,8 +362,9 @@ components:
         name:
           type: string
           readOnly: true
-        updated_ago:
+        updated:
           type: string
+          format: date-time
           readOnly: true
       required:
         - id
@@ -551,6 +552,8 @@ components:
               error:
                 type: object
                 required:
+                  - message
+                  - code
                   - hasLands
                   - missingManaForColor
                   - fourOrMore
@@ -602,6 +605,9 @@ components:
               data:
                 type: object
                 readOnly: true
+                required:
+                  - message
+                  - code
               error:
                 type: object
                 additionalProperties: false
