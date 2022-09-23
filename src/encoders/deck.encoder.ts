@@ -1,13 +1,10 @@
-import { Deck } from '@prisma/client';
+import type { Deck } from '@prisma/client';
 import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 
-dayjs.extend(relativeTime);
-
-const deckEncoder = (deck: Deck) => ({
+const deckEncoder = (deck: Pick<Deck, 'id' | 'name' | 'updated'>) => ({
   id: deck.id,
   name: deck.name,
-  updated_ago: dayjs(deck.updated).fromNow(),
+  updated: dayjs(deck.updated).toISOString(),
 });
 
 export default deckEncoder;

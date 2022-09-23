@@ -1,4 +1,4 @@
-import { Card, CardsInDeck } from '@prisma/client';
+import type { Card, CardsInDeck } from '@prisma/client';
 import cardEncoder from './card.encoder';
 
 type CardsInDecksWithCards = CardsInDeck & { cards: Card };
