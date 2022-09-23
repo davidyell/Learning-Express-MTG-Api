@@ -4,29 +4,30 @@ import deckEncoder from '../encoders/deck.encoder';
 import playerEncoder from '../encoders/player.encoder';
 import cardInDeckEncoder from '../encoders/cardInDeck.encoder';
 import prismaClient from '../../prisma/client';
-import type { PostDeck } from '../types/deck.types';
+import type { DeckListRaw, PostDeck } from '../types/deck.types';
 import DeckValidator from '../validators/deck.validator';
 import { GenericError, ValidationError } from '../types/error.types';
 
 const index = async (request: Request, response: Response) => {
-  const results = await prismaClient.deck.findMany({
-    include: {
-      player: true,
-      _count: {
-        select: {
-          cards_in_decks: true,
-        },
-      },
-    },
-  });
+  // Prisma doesn't support using SUM() on an association, so have to do a manual query
+  const results = await prismaClient.$queryRaw<DeckListRaw[]>`SELECT decks.id AS deck_id,decks.name AS deck_name,decks.player_id AS deck_player_id,decks.created AS deck_created,decks.updated AS deck_updated,players.id AS player_id,players.email AS player_email,players.first_name AS player_first_name,players.last_name AS player_last_name,players.avatar as player_avatar,SUM(cards_in_decks.quantity)AS total_cards FROM decks JOIN players ON decks.player_id=players.id JOIN cards_in_decks ON cards_in_decks.deck_id=decks.id GROUP BY decks.id`;
 
   const responseData = {
-    data: results.map((result) => ({
-      deck: deckEncoder(result),
-      player: playerEncoder(result.player),
+    data: results.map((result: DeckListRaw) => ({
+      deck: deckEncoder({
+        id: result.deck_id,
+        name: result.deck_name,
+        updated: result.deck_updated,
+      }),
+      player: playerEncoder({
+        id: result.player_id,
+        first_name: result.player_first_name,
+        last_name: result.player_last_name,
+        avatar: result.player_avatar,
+      }),
       meta: {
-        // eslint-disable-next-line no-underscore-dangle
-        card_count: result._count.cards_in_decks,
+        // Sidestep the issue serializing BigInt
+        card_count: parseInt(result.total_cards.toString(), 10),
       },
     })),
   };

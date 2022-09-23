@@ -1,18 +1,12 @@
 import { NotFoundError } from '@prisma/client/runtime';
-import dayjs from 'dayjs';
 import express, { Request } from 'express';
 import prismaClient from '../../prisma/client';
 import { prismaMock } from '../../prisma/client.mock';
 import exampleDeck from '../tests/fixtures/example.deck.payload';
+import { DeckListRaw } from '../types/deck.types';
 import { index, view } from './decks.controller';
 
 describe('Decks controller integration tests', () => {
-
-  /**
-   * TODO: Needs more time investment to create a testing database setup, which is entirely manual, for now this test will create a deck in the 'main' database
-   * 
-   * @see https://github.com/prisma/prisma/discussions/2792
-   */
   it('should create a new deck', async () => {
     const player = await prismaClient.player.findFirst();
     if (player === null) throw Error('No players found');
@@ -41,55 +35,48 @@ describe('Decks controller integration tests', () => {
       json: jest.fn((result) => result),
     }
 
-    const occurred = new Date(dayjs().subtract(2, 'hour').toISOString());
-
-    const queryResult = [
+    const queryResult: DeckListRaw[] = [
       {
-        "id": 15,
-        "name": "Smoothly Accountant",
-        "player_id": 25,
-        "created": occurred,
-        "updated": occurred,
-        "player": {
-          "id": 25,
-          "first_name": "Kara",
-          "last_name": "Schaden",
-          "email": "Kara17@example.com",
-          "created": occurred,
-          "avatar": "avatar-21f7dc9de5da2a76540c217f2d300753.jpg"
-        },
-        "_count": {
-          "cards_in_decks": 5
-        }
+        deck_id: 11,
+        deck_name: 'Burn a Modern deck by Michael Barnes',
+        deck_player_id: 5,
+        deck_created: new Date("2022-09-21T14:17:12.324Z"),
+        deck_updated: new Date("2022-09-21T14:17:12.325Z"),
+        player_id: 5,
+        player_email: 'Glen_Johnston29@example.net',
+        player_first_name: 'Glen',
+        player_last_name: 'Johnston',
+        player_avatar: "avatar-21f7dc9de5da2a76540c217f2d300753.jpg",
+        total_cards: 73
       },
     ];
 
-    prismaMock.deck.findMany.mockResolvedValue(queryResult)
+    prismaMock.$queryRaw.mockResolvedValue(queryResult)
 
     const result = await index(request, response);
     const expected = {
       "data": [
         {
           "deck": {
-            "id": 15,
-            "name": "Smoothly Accountant",
-            "updated_ago": "2 hours ago"
+            "id": 11,
+            "name": "Burn a Modern deck by Michael Barnes",
+            "updated": "2022-09-21T14:17:12.325Z"
           },
           "player": {
-            "id": 25,
-            "first_name": "Kara",
-            "last_name": "Schaden",
+            "id": 5,
+            "first_name": "Glen",
+            "last_name": "Johnston",
             "avatar": "avatar-21f7dc9de5da2a76540c217f2d300753.jpg"
           },
           "meta": {
-            "card_count": 5
+            "card_count": 73
           }
         }
       ]
     };
 
     expect(result).toEqual(expected);
-    expect(prismaMock.deck.findMany).toBeCalledTimes(1)
+    expect(prismaMock.$queryRaw).toBeCalledTimes(1)
   });
 
   it('should return an error when deck is not found', async () => {
