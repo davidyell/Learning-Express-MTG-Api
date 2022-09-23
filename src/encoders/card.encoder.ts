@@ -1,4 +1,4 @@
-import { Card } from '@prisma/client';
+import type { Card } from '@prisma/client';
 
 const cardEncoder = (card: Card) => ({
   id: card.id,

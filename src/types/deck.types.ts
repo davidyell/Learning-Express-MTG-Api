@@ -34,3 +34,17 @@ export type DeckValidationErrors = {
   sideboardSize: boolean,
   deckSize: boolean,
 }
+
+export type DeckListRaw = {
+  deck_id: Deck['id'];
+  deck_name: Deck['name'];
+  deck_player_id: Deck['player_id'];
+  deck_created: Deck['created'];
+  deck_updated: Deck['updated'];
+  player_id: Player['id'];
+  player_email: Player['email'];
+  player_first_name: Player['first_name'];
+  player_last_name: Player['last_name'];
+  player_avatar: Player['avatar'];
+  total_cards: number;
+}
